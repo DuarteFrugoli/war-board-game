@@ -1,0 +1,69 @@
+{
+  "continents": [
+    {
+      "name": "América do Sul",
+      "territories": ["Brasil", "Argentina", "Peru", "Venezuela"]
+    },
+    {
+      "name": "América do Norte",
+      "territories": ["Alasca", "Calgary", "Groenlândia", "México", "Vancouver", "Nova York", "Califórnia", "Labrador", "Texas"]
+    },
+    {
+      "name": "Europa",
+      "territories": ["Islândia", "Inglaterra", "Espanha", "França", "Itália", "Polônia", "Alemanha"]
+    },
+    {
+      "name": "África",
+      "territories": ["Argélia", "Egito", "Somália", "África do Sul", "Congo", "Nigéria"]
+    },
+    {
+      "name": "Ásia",
+      "territories": ["Arábia Saudita", "Índia", "Sibéria", "China", "Cazaquistão", "Irã", "Japão", "Mongólia", "Vietnã"]
+    },
+    {
+      "name": "Oceania",
+      "territories": ["Austrália", "Nova Zelândia", "Indonésia", "Nova Guiné"]
+    }
+  ],
+  "territories": [
+    {"name": "Brasil", "continent": "América do Sul"},
+    {"name": "Argentina", "continent": "América do Sul"},
+    {"name": "Peru", "continent": "América do Sul"},
+    {"name": "Venezuela", "continent": "América do Sul"},
+    {"name": "Alasca", "continent": "América do Norte"},
+    {"name": "Calgary", "continent": "América do Norte"},
+    {"name": "Groenlândia", "continent": "América do Norte"},
+    {"name": "México", "continent": "América do Norte"},
+    {"name": "Vancouver", "continent": "América do Norte"},
+    {"name": "Nova York", "continent": "América do Norte"},
+    {"name": "Califórnia", "continent": "América do Norte"},
+    {"name": "Labrador", "continent": "América do Norte"},
+    {"name": "Texas", "continent": "América do Norte"},
+    {"name": "Islândia", "continent": "Europa"},
+    {"name": "Inglaterra", "continent": "Europa"},
+    {"name": "Espanha", "continent": "Europa"},
+    {"name": "França", "continent": "Europa"},
+    {"name": "Itália", "continent": "Europa"},
+    {"name": "Polônia", "continent": "Europa"},
+    {"name": "Alemanha", "continent": "Europa"},
+    {"name": "Argélia", "continent": "África"},
+    {"name": "Egito", "continent": "África"},
+    {"name": "Somália", "continent": "África"},
+    {"name": "África do Sul", "continent": "África"},
+    {"name": "Congo", "continent": "África"},
+    {"name": "Nigéria", "continent": "África"},
+    {"name": "Arábia Saudita", "continent": "Ásia"},
+    {"name": "Índia", "continent": "Ásia"},
+    {"name": "Sibéria", "continent": "Ásia"},
+    {"name": "China", "continent": "Ásia"},
+    {"name": "Cazaquistão", "continent": "Ásia"},
+    {"name": "Irã", "continent": "Ásia"},
+    {"name": "Japão", "continent": "Ásia"},
+    {"name": "Mongólia", "continent": "Ásia"},
+    {"name": "Vietnã", "continent": "Ásia"},
+    {"name": "Austrália", "continent": "Oceania"},
+    {"name": "Nova Zelândia", "continent": "Oceania"},
+    {"name": "Indonésia", "continent": "Oceania"},
+    {"name": "Nova Guiné", "continent": "Oceania"}
+  ]
+}

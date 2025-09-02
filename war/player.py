@@ -1,6 +1,9 @@
+from .enums import Color
+
 class Player:
-    def __init__(self, name):
+    def __init__(self, name, color):
         self.name = name
+        self.color = color  # Color enum
         self.countryCounters = {}  # Exemplo: {'Brazil': 5, 'Argentina': 3}
 
     def atacar(self, jogador, unidades):

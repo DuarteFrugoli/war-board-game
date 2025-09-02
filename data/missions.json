@@ -1,0 +1,12 @@
+[
+	{"id": 1, "description": "Conquistar a América do Sul e a África."},
+	{"id": 2, "description": "Conquistar a América do Norte e a África."},
+	{"id": 3, "description": "Conquistar a Europa e a América do Sul."},
+	{"id": 4, "description": "Conquistar a Europa e a Oceania."},
+	{"id": 5, "description": "Conquistar a Ásia e a América do Sul."},
+	{"id": 6, "description": "Conquistar a Ásia e a África."},
+	{"id": 7, "description": "Conquistar a América do Norte e a Oceania."},
+	{"id": 8, "description": "Conquistar a Europa, a Oceania e mais um continente à sua escolha."},
+	{"id": 9, "description": "Conquistar 24 territórios à sua escolha."},
+	{"id": 10, "description": "Destruir totalmente as tropas de um jogador específico. Se este objetivo já tiver sido eliminado, conquistar 24 territórios à sua escolha."}
+]

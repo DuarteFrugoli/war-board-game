@@ -1,0 +1,31 @@
+# Ambiente virtual criado pelo Poetry ou venv
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# Arquivos de cache do Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Arquivos de log e temporários
+*.log
+*.tmp
+
+# Configurações do VS Code
+.vscode/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de dependências gerados pelo Poetry
+poetry.lock
+
+# Arquivos de testes (opcional)
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/

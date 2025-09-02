@@ -1,0 +1,2 @@
+# continent.py
+# Classe Continent

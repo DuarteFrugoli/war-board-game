@@ -1,0 +1,2 @@
+# territory.py
+# Classe Territory
