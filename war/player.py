@@ -1,10 +1,14 @@
 from .enums import Color
 
+
 class Player:
-    def __init__(self, name, color):
+    def __init__(self, name, color, mission=None):
         self.name = name
         self.color = color  # Color enum
         self.countryCounters = {}  # Exemplo: {'Brazil': 5, 'Argentina': 3}
+        self.territories = []  # Lista de Territory
+        self.cards = []  # Lista de Card
+        self.mission = mission
 
     def atacar(self, jogador, unidades):
         # ...lógica de ataque...
