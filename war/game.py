@@ -1,74 +1,81 @@
-# Lógica principal do jogo War
-
-import json
 import random
-from pathlib import Path
-from .territory import Territory
-from .continent import Continent
-from .card import Card
+from .Territory import Territory
+from .Card import Card
+from .Deck import Deck
+from .utils_data import load_map_data, load_missions
 
-def load_map_data():
-	with open(Path(__file__).parent.parent / 'data' / 'map.json', encoding='utf-8') as f:
-		return json.load(f)
+class Game:
+	def __init__(self, players, dealer):
+		self.players = players
+		self.dealer = dealer
+		self.map_data = load_map_data()
+		self.missions = load_missions()
+		self.territories = self.create_territories()
+		self.cards, self.jokers = self.create_cards()
+		self.deck = Deck()  # Baralho final para o jogo
+		self.setup()
 
-def load_missions():
-	with open(Path(__file__).parent.parent / 'data' / 'missions.json', encoding='utf-8') as f:
-		return json.load(f)
+	def create_territories(self):
+		territories = []
+		for t in self.map_data['territories']:
+			borders = t.get('borders', [])
+			territory = Territory(t['name'], t['continent'], borders)
+			territories.append(territory)
+		return territories
 
-def create_territories(map_data):
-	return [Territory(t['name'], t['continent']) for t in map_data['territories']]
+	def create_cards(self):
+		symbols = ['quadrado', 'círculo', 'triângulo']
+		cards = []
+		for i, territory in enumerate(self.territories):
+			symbol = symbols[i % 3]
+			cards.append(Card(territory.name, symbol))
+		# Dois curingas clássicos
+		jokers = [Card(None, 'coringa'), Card(None, 'coringa')]
+		return cards, jokers
 
-def create_continents(map_data):
-	return [Continent(c['name'], c['territories']) for c in map_data['continents']]
+	def setup(self):
+		self.distribute_missions()
+		self.distribute_territory_cards()
+		self.assign_territories_and_place_troops()
+		self.collect_cards_and_prepare_deck()
 
-def create_cards(territories):
-	# Símbolos: quadrado, círculo, triângulo (distribuição igual)
-	symbols = ['quadrado', 'círculo', 'triângulo']
-	cards = []
-	for i, territory in enumerate(territories):
-		symbol = symbols[i % 3]
-		cards.append(Card(territory.name, symbol))
-	return cards
+	def distribute_missions(self):
+		random.shuffle(self.missions)
+		for i, player in enumerate(self.players):
+			player.receive_mission(self.missions[i])
 
-def distribute_missions(players, missions):
-	random.shuffle(missions)
-	for i, player in enumerate(players):
-		player.mission = missions[i]
+	def distribute_territory_cards(self):
+		# Remove curingas, distribui só cartas de território
+		n = len(self.players)
+		dealer_idx = self.players.index(self.dealer)
+		order = [(dealer_idx + 1 + i) % n for i in range(n)]
+		deck = self.cards[:]
+		random.shuffle(deck)
+		idx = 0
+		while deck:
+			player = self.players[order[idx % n]]
+			player.receive_card(deck.pop(0))
+			idx += 1
 
-def distribute_cards(players, cards, dealer):
-	# Começa do próximo ao dealer
-	n = len(players)
-	dealer_idx = players.index(dealer)
-	order = [(dealer_idx + 1 + i) % n for i in range(n)]
-	deck = cards[:]
-	random.shuffle(deck)
-	idx = 0
-	while deck:
-		player = players[order[idx % n]]
-		player.cards.append(deck.pop(0))
-		idx += 1
+	def assign_territories_and_place_troops(self):
+		# Cada player recebe os territórios das cartas e coloca 1 tropa
+		territory_dict = {t.name: t for t in self.territories}
+		for player in self.players:
+			for card in player.cards:
+				terr = territory_dict.get(card.territory_name)
+				if terr:
+					terr.owner = player
+					player.receive_territory(terr)
+					terr.troops = 1  # 1 tropa inicial
+			# Limpa as cartas do player após distribuição
+			player.cards.clear()
 
-def assign_territories(players, territories):
-	# Cada player recebe os territórios das cartas que possui
-	territory_dict = {t.name: t for t in territories}
-	for player in players:
-		for card in player.cards:
-			terr = territory_dict.get(card.territory_name)
-			if terr:
-				terr.owner = player
-				player.territories.append(terr)
+	def collect_cards_and_prepare_deck(self):
+		# Junta todas as cartas de território e curingas, embaralha e deixa pronto para o jogo
+		all_cards = self.cards + self.jokers
+		self.deck = Deck(all_cards)
+		self.deck.shuffle()
 
-def setup_game(players, dealer):
-	map_data = load_map_data()
-	missions = load_missions()
-	territories = create_territories(map_data)
-	continents = create_continents(map_data)
-	cards = create_cards(territories)
-	distribute_missions(players, missions)
-	distribute_cards(players, cards, dealer)
-	assign_territories(players, territories)
-	return territories, continents, cards
-
-def get_first_player_after_dealer(players, dealer):
-	idx = players.index(dealer)
-	return players[(idx + 1) % len(players)]
+	def get_first_player_after_dealer(self):
+		idx = self.players.index(self.dealer)
+		return self.players[(idx + 1) % len(self.players)]
