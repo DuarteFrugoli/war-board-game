@@ -22,8 +22,8 @@ class TestGame(unittest.TestCase):
     def test_game_initialization(self, mock_missions, mock_map):
         mock_map.return_value = {
             'territories': [
-                {'name': 'Brasil', 'continent': 'América do Sul', 'borders': ['Argentina']},
-                {'name': 'Argentina', 'continent': 'América do Sul', 'borders': ['Brasil']}
+                {'name': 'Brasil', 'continent': 'América do Sul', 'borders': ['Argentina'], 'symbol': 'quadrado'},
+                {'name': 'Argentina', 'continent': 'América do Sul', 'borders': ['Brasil'], 'symbol': 'círculo'}
             ],
             'continents': [
                 {'name': 'América do Sul', 'territories': ['Brasil', 'Argentina']}
@@ -47,8 +47,8 @@ class TestGame(unittest.TestCase):
     def test_create_territories(self, mock_missions, mock_map):
         mock_map.return_value = {
             'territories': [
-                {'name': 'Brasil', 'continent': 'América do Sul', 'borders': ['Argentina']},
-                {'name': 'Argentina', 'continent': 'América do Sul', 'borders': ['Brasil']}
+                {'name': 'Brasil', 'continent': 'América do Sul', 'borders': ['Argentina'], 'symbol': 'quadrado'},
+                {'name': 'Argentina', 'continent': 'América do Sul', 'borders': ['Brasil'], 'symbol': 'círculo'}
             ]
         }
         mock_missions.return_value = [
@@ -69,9 +69,9 @@ class TestGame(unittest.TestCase):
     def test_create_cards(self, mock_missions, mock_map):
         mock_map.return_value = {
             'territories': [
-                {'name': 'Brasil', 'continent': 'América do Sul'},
-                {'name': 'Argentina', 'continent': 'América do Sul'},
-                {'name': 'França', 'continent': 'Europa'}
+                {'name': 'Brasil', 'continent': 'América do Sul', 'symbol': 'quadrado'},
+                {'name': 'Argentina', 'continent': 'América do Sul', 'symbol': 'círculo'},
+                {'name': 'França', 'continent': 'Europa', 'symbol': 'triângulo'}
             ]
         }
         mock_missions.return_value = [
@@ -85,11 +85,10 @@ class TestGame(unittest.TestCase):
         self.assertEqual(len(cards), 3)  # Uma carta por território
         self.assertEqual(len(jokers), 2)  # Dois curingas
         
-        # Verifica símbolos alternados
+        # Verifica símbolos das cartas
         symbols = [card.symbol for card in cards]
         expected_symbols = ['quadrado', 'círculo', 'triângulo']
-        for i, symbol in enumerate(symbols):
-            self.assertEqual(symbol, expected_symbols[i % 3])
+        self.assertEqual(symbols, expected_symbols)
 
     def test_get_first_player_after_dealer(self):
         game = Game.__new__(Game)  # Cria instância sem chamar __init__

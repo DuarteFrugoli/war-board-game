@@ -6,69 +6,72 @@
     },
     {
       "name": "América do Norte",
-      "territories": ["Alasca", "Calgary", "Groenlândia", "México", "Vancouver", "Nova York", "Califórnia", "Labrador", "Texas"]
+      "territories": ["Alasca", "Ottawa", "Groenlândia", "México", "Vancouver", "Nova York", "Califórnia", "Labrador", "Mackenzie"]
     },
     {
       "name": "Europa",
-      "territories": ["Islândia", "Inglaterra", "Espanha", "França", "Itália", "Polônia", "Alemanha"]
+      "territories": ["Islândia", "Inglaterra", "Moscou", "França", "Suécia", "Polônia", "Alemanha"]
     },
     {
       "name": "África",
-      "territories": ["Argélia", "Egito", "Somália", "África do Sul", "Congo", "Nigéria"]
+      "territories": ["Argélia", "Egito", "Sudão", "África do Sul", "Congo", "Madagascar"]
     },
     {
       "name": "Ásia",
-      "territories": ["Arábia Saudita", "Índia", "Sibéria", "China", "Cazaquistão", "Irã", "Japão", "Mongólia", "Vietnã"]
+      "territories": ["Oriente Médio", "Índia", "Aral", "Mongólia", "China", "Vladivostok", "Sibéria", "Japão", "Tchita", "Vietnã", "Dudinka", "Omsk"]
     },
     {
       "name": "Oceania",
-      "territories": ["Austrália", "Nova Zelândia", "Indonésia", "Nova Guiné"]
+      "territories": ["Austrália", "Bornéu", "Sumatra", "Nova Guiné"]
     }
   ],
   "territories": [
-  {"name": "Brasil", "continent": "América do Sul", "borders": ["Argentina", "Peru", "Venezuela", "África do Sul"]},
-  {"name": "Argentina", "continent": "América do Sul", "borders": ["Brasil", "Peru"]},
-  {"name": "Peru", "continent": "América do Sul", "borders": ["Brasil", "Argentina", "Venezuela"]},
-  {"name": "Venezuela", "continent": "América do Sul", "borders": ["Brasil", "Peru", "México"]},
+  {"name": "Brasil", "continent": "América do Sul", "borders": ["Argentina", "Peru", "Venezuela", "África do Sul"], "symbol": "quadrado"},
+  {"name": "Argentina", "continent": "América do Sul", "borders": ["Brasil", "Peru"], "symbol": "círculo"},
+  {"name": "Peru", "continent": "América do Sul", "borders": ["Brasil", "Argentina", "Venezuela"], "symbol": "triângulo"},
+  {"name": "Venezuela", "continent": "América do Sul", "borders": ["Brasil", "Peru", "México"], "symbol": "quadrado"},
 
-  {"name": "Alasca", "continent": "América do Norte", "borders": ["Calgary", "Vancouver", "Sibéria"]},
-  {"name": "Calgary", "continent": "América do Norte", "borders": ["Alasca", "Vancouver", "Groenlândia", "Labrador"]},
-  {"name": "Groenlândia", "continent": "América do Norte", "borders": ["Calgary", "Labrador", "Nova York"]},
-  {"name": "México", "continent": "América do Norte", "borders": ["Venezuela", "Texas", "Califórnia"]},
-  {"name": "Vancouver", "continent": "América do Norte", "borders": ["Alasca", "Calgary", "Califórnia"]},
-  {"name": "Nova York", "continent": "América do Norte", "borders": ["Groenlândia", "Labrador", "Califórnia", "Texas"]},
-  {"name": "Califórnia", "continent": "América do Norte", "borders": ["Vancouver", "Nova York", "Texas", "México"]},
-  {"name": "Labrador", "continent": "América do Norte", "borders": ["Calgary", "Groenlândia", "Nova York"]},
-  {"name": "Texas", "continent": "América do Norte", "borders": ["Nova York", "Califórnia", "México"]},
+  {"name": "Alasca", "continent": "América do Norte", "borders": ["Mackenzie", "Vancouver", "Sibéria"], "symbol": "círculo"},
+  {"name": "Ottawa", "continent": "América do Norte", "borders": ["Groenlândia", "Labrador", "Nova York"], "symbol": "triângulo"},
+  {"name": "Groenlândia", "continent": "América do Norte", "borders": ["Ottawa", "Labrador", "Islândia"], "symbol": "quadrado"},
+  {"name": "México", "continent": "América do Norte", "borders": ["Venezuela", "Califórnia"], "symbol": "círculo"},
+  {"name": "Vancouver", "continent": "América do Norte", "borders": ["Alasca", "Mackenzie", "Califórnia"], "symbol": "triângulo"},
+  {"name": "Nova York", "continent": "América do Norte", "borders": ["Ottawa", "Labrador", "Califórnia"], "symbol": "quadrado"},
+  {"name": "Califórnia", "continent": "América do Norte", "borders": ["Vancouver", "Nova York", "México"], "symbol": "círculo"},
+  {"name": "Labrador", "continent": "América do Norte", "borders": ["Ottawa", "Groenlândia", "Nova York"], "symbol": "triângulo"},
+  {"name": "Mackenzie", "continent": "América do Norte", "borders": ["Alasca", "Vancouver", "Groenlândia"], "symbol": "quadrado"},
 
-  {"name": "Islândia", "continent": "Europa", "borders": ["Inglaterra", "Alemanha"]},
-  {"name": "Inglaterra", "continent": "Europa", "borders": ["Islândia", "Espanha", "França", "Alemanha"]},
-  {"name": "Espanha", "continent": "Europa", "borders": ["Inglaterra", "França", "Argélia"]},
-  {"name": "França", "continent": "Europa", "borders": ["Inglaterra", "Espanha", "Itália", "Alemanha", "Argélia"]},
-  {"name": "Itália", "continent": "Europa", "borders": ["França", "Polônia", "Alemanha", "Egito"]},
-  {"name": "Polônia", "continent": "Europa", "borders": ["Itália", "Alemanha", "Rússia"]},
-  {"name": "Alemanha", "continent": "Europa", "borders": ["Islândia", "Inglaterra", "França", "Itália", "Polônia"]},
+  {"name": "Islândia", "continent": "Europa", "borders": ["Inglaterra", "Groenlândia"], "symbol": "círculo"},
+  {"name": "Inglaterra", "continent": "Europa", "borders": ["Islândia", "França", "Alemanha"], "symbol": "triângulo"},
+  {"name": "Moscou", "continent": "Europa", "borders": ["Polônia", "Suécia", "Omsk"], "symbol": "quadrado"},
+  {"name": "França", "continent": "Europa", "borders": ["Inglaterra", "Alemanha", "Argélia"], "symbol": "círculo"},
+  {"name": "Suécia", "continent": "Europa", "borders": ["Moscou", "Polônia", "Alemanha"], "symbol": "triângulo"},
+  {"name": "Polônia", "continent": "Europa", "borders": ["Moscou", "Suécia", "Alemanha"], "symbol": "quadrado"},
+  {"name": "Alemanha", "continent": "Europa", "borders": ["Islândia", "Inglaterra", "França", "Suécia", "Polônia"], "symbol": "círculo"},
 
-  {"name": "Argélia", "continent": "África", "borders": ["Espanha", "França", "Nigéria", "Egito"]},
-  {"name": "Egito", "continent": "África", "borders": ["Argélia", "Itália", "Nigéria", "Somália"]},
-  {"name": "Somália", "continent": "África", "borders": ["Egito", "Nigéria", "África do Sul"]},
-  {"name": "África do Sul", "continent": "África", "borders": ["Somália", "Nigéria", "Congo", "Brasil", "Austrália"]},
-  {"name": "Congo", "continent": "África", "borders": ["África do Sul", "Nigéria"]},
-  {"name": "Nigéria", "continent": "África", "borders": ["Argélia", "Egito", "Somália", "África do Sul", "Congo"]},
+  {"name": "Argélia", "continent": "África", "borders": ["França", "Egito", "Sudão"], "symbol": "triângulo"},
+  {"name": "Egito", "continent": "África", "borders": ["Argélia", "Sudão", "África do Sul", "Oriente Médio"], "symbol": "quadrado"},
+  {"name": "Sudão", "continent": "África", "borders": ["Argélia", "Egito", "Congo", "África do Sul"], "symbol": "círculo"},
+  {"name": "África do Sul", "continent": "África", "borders": ["Egito", "Sudão", "Congo", "Madagascar", "Brasil", "Austrália"], "symbol": "triângulo"},
+  {"name": "Congo", "continent": "África", "borders": ["Sudão", "África do Sul", "Madagascar"], "symbol": "quadrado"},
+  {"name": "Madagascar", "continent": "África", "borders": ["África do Sul", "Congo"], "symbol": "círculo"},
 
-  {"name": "Arábia Saudita", "continent": "Ásia", "borders": ["Egito", "Irã", "Índia"]},
-  {"name": "Índia", "continent": "Ásia", "borders": ["Arábia Saudita", "Irã", "China", "Vietnã"]},
-  {"name": "Sibéria", "continent": "Ásia", "borders": ["Alasca", "Mongólia", "China", "Cazaquistão"]},
-  {"name": "China", "continent": "Ásia", "borders": ["Sibéria", "Mongólia", "Índia", "Vietnã", "Cazaquistão"]},
-  {"name": "Cazaquistão", "continent": "Ásia", "borders": ["Sibéria", "China", "Irã", "Mongólia"]},
-  {"name": "Irã", "continent": "Ásia", "borders": ["Cazaquistão", "Arábia Saudita", "Índia"]},
-  {"name": "Japão", "continent": "Ásia", "borders": ["Mongólia", "Vietnã"]},
-  {"name": "Mongólia", "continent": "Ásia", "borders": ["Sibéria", "Cazaquistão", "China", "Japão"]},
-  {"name": "Vietnã", "continent": "Ásia", "borders": ["Índia", "China", "Japão", "Indonésia"]},
+  {"name": "Oriente Médio", "continent": "Ásia", "borders": ["Egito", "Índia", "Aral"], "symbol": "triângulo"},
+  {"name": "Índia", "continent": "Ásia", "borders": ["Oriente Médio", "China", "Vietnã"], "symbol": "quadrado"},
+  {"name": "Aral", "continent": "Ásia", "borders": ["Oriente Médio", "Omsk", "China"], "symbol": "círculo"},
+  {"name": "Mongólia", "continent": "Ásia", "borders": ["Sibéria", "China", "Japão", "Tchita"], "symbol": "triângulo"},
+  {"name": "China", "continent": "Ásia", "borders": ["Aral", "Mongólia", "Índia", "Vietnã"], "symbol": "quadrado"},
+  {"name": "Vladivostok", "continent": "Ásia", "borders": ["Tchita", "Japão"], "symbol": "círculo"},
+  {"name": "Sibéria", "continent": "Ásia", "borders": ["Alasca", "Mongólia", "Tchita", "Dudinka"], "symbol": "triângulo"},
+  {"name": "Japão", "continent": "Ásia", "borders": ["Mongólia", "Vladivostok", "Vietnã"], "symbol": "quadrado"},
+  {"name": "Tchita", "continent": "Ásia", "borders": ["Mongólia", "Vladivostok", "Sibéria", "Omsk"], "symbol": "círculo"},
+  {"name": "Vietnã", "continent": "Ásia", "borders": ["Índia", "China", "Japão", "Bornéu"], "symbol": "triângulo"},
+  {"name": "Dudinka", "continent": "Ásia", "borders": ["Sibéria", "Omsk"], "symbol": "quadrado"},
+  {"name": "Omsk", "continent": "Ásia", "borders": ["Moscou", "Aral", "Tchita", "Dudinka"], "symbol": "círculo"},
 
-  {"name": "Austrália", "continent": "Oceania", "borders": ["Nova Zelândia", "Indonésia", "Nova Guiné", "África do Sul"]},
-  {"name": "Nova Zelândia", "continent": "Oceania", "borders": ["Austrália", "Nova Guiné"]},
-  {"name": "Indonésia", "continent": "Oceania", "borders": ["Austrália", "Nova Guiné", "Vietnã"]},
-  {"name": "Nova Guiné", "continent": "Oceania", "borders": ["Austrália", "Nova Zelândia", "Indonésia"]}
+  {"name": "Austrália", "continent": "Oceania", "borders": ["Bornéu", "Sumatra", "Nova Guiné", "África do Sul"], "symbol": "triângulo"},
+  {"name": "Bornéu", "continent": "Oceania", "borders": ["Austrália", "Sumatra", "Nova Guiné", "Vietnã"], "symbol": "quadrado"},
+  {"name": "Sumatra", "continent": "Oceania", "borders": ["Austrália", "Bornéu", "Nova Guiné"], "symbol": "círculo"},
+  {"name": "Nova Guiné", "continent": "Oceania", "borders": ["Austrália", "Bornéu", "Sumatra"], "symbol": "triângulo"}
   ]
 }

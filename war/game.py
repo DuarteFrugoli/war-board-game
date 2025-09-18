@@ -24,11 +24,10 @@ class Game:
 		return territories
 
 	def create_cards(self):
-		symbols = ['quadrado', 'círculo', 'triângulo']
+		# Cartas de território vêm do map.json com símbolos definidos
 		cards = []
-		for i, territory in enumerate(self.territories):
-			symbol = symbols[i % 3]
-			cards.append(Card(territory.name, symbol))
+		for territory_data in self.map_data['territories']:
+			cards.append(Card(territory_data['name'], territory_data['symbol']))
 		# Dois curingas clássicos
 		jokers = [Card(None, 'coringa'), Card(None, 'coringa')]
 		return cards, jokers
