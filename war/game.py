@@ -175,10 +175,11 @@ class Game:
 	def phase_4_draw_card(self, player, territories_conquered):
 		"""Etapa 4: Recebe carta se conquistou pelo menos 1 território."""
 		if territories_conquered > 0:
-			if not self.deck.is_empty():
+			if hasattr(self.deck, 'cards') and len(self.deck.cards) > 0:
 				card = self.deck.draw()
-				player.receive_card(card)
-				return card
+				if card:
+					player.receive_card(card)
+					return card
 		return None
 
 	def play_turn(self, player):
@@ -213,7 +214,12 @@ class Game:
 
 	def start_game(self):
 		"""Inicia o jogo após o setup, começando com o primeiro jogador após o dealer."""
-		current_player_index = (self.players.index(self.dealer) + 1) % len(self.players)
+		if self.dealer in self.players:
+			dealer_index = self.players.index(self.dealer)
+			current_player_index = (dealer_index + 1) % len(self.players)
+		else:
+			print("Aviso: dealer não encontrado nos jogadores, começando com jogador 0")
+			current_player_index = 0
 		return current_player_index
 
 	def get_next_player(self, current_player_index):
