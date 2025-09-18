@@ -9,6 +9,7 @@ env/
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyc
 
 # Arquivos de log e temporários
 *.log
@@ -21,11 +22,28 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Arquivos de dependências gerados pelo Poetry
-poetry.lock
+# Poetry - MANTER poetry.lock no repositório!
+# poetry.lock deve ser commitado para garantir reprodutibilidade
 
-# Arquivos de testes (opcional)
+# Build artifacts do Poetry
+dist/
+build/
+*.egg-info/
+
+# Arquivos de testes
 .coverage
 htmlcov/
 .tox/
 .pytest_cache/
+.cache/
+
+# PyCharm
+.idea/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
