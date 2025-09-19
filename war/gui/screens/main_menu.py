@@ -11,10 +11,20 @@ class MainMenu:
         self.font_large = pygame.font.Font(None, FONT_LARGE)
         self.font_medium = pygame.font.Font(None, FONT_MEDIUM)
         
+        # Dimensões atuais da tela
+        self.screen_width, self.screen_height = screen.get_size()
+        
+        # Configurar botões iniciais
+        self.setup_buttons()
+        
+        self.selected_players = 3  # Padrão: 3 jogadores
+    
+    def setup_buttons(self):
+        """Configura os botões baseado nas dimensões atuais da tela."""
         # Botões principais
         self.buttons = {
-            "new_game": pygame.Rect(SCREEN_WIDTH//2 - 100, 400, 200, BUTTON_HEIGHT),
-            "quit": pygame.Rect(SCREEN_WIDTH//2 - 100, 460, 200, BUTTON_HEIGHT)
+            "new_game": pygame.Rect(self.screen_width//2 - 100, self.screen_height * 0.5, 200, BUTTON_HEIGHT),
+            "quit": pygame.Rect(self.screen_width//2 - 100, self.screen_height * 0.575, 200, BUTTON_HEIGHT)
         }
         
         # Botões para seleção de número de jogadores
@@ -24,14 +34,18 @@ class MainMenu:
         button_spacing = 25
         num_buttons = 4
         total_width = (num_buttons * button_width) + ((num_buttons - 1) * button_spacing)
-        start_x = (SCREEN_WIDTH - total_width) // 2
-        button_y = 260  # Posição Y mais centrada
+        start_x = (self.screen_width - total_width) // 2
+        button_y = int(self.screen_height * 0.325)  # Posição Y mais centrada
         
         for i, num in enumerate([3, 4, 5, 6]):
             x = start_x + i * (button_width + button_spacing)
             self.player_buttons[num] = pygame.Rect(x, button_y, button_width, button_height)
-        
-        self.selected_players = 3  # Padrão: 3 jogadores
+    
+    def update_dimensions(self, screen_width, screen_height):
+        """Atualiza as dimensões da tela e reconfigura os botões."""
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.setup_buttons()
         
     def handle_event(self, event):
         """Processa eventos do menu."""
@@ -75,13 +89,13 @@ class MainMenu:
         
         # Título
         title_text = self.font_large.render("WAR - Jogo de Estratégia", True, WHITE)
-        title_rect = title_text.get_rect(center=(SCREEN_WIDTH//2, 120))
+        title_rect = title_text.get_rect(center=(self.screen_width//2, int(self.screen_height * 0.15)))
         self.screen.blit(title_text, title_rect)
         
         # Subtítulo
         subtitle_text = "Escolha o número de jogadores:"
         subtitle_surface = self.font_medium.render(subtitle_text, True, WHITE)
-        subtitle_rect = subtitle_surface.get_rect(center=(SCREEN_WIDTH//2, 200))
+        subtitle_rect = subtitle_surface.get_rect(center=(self.screen_width//2, int(self.screen_height * 0.25)))
         self.screen.blit(subtitle_surface, subtitle_rect)
         
         # Botões de seleção de jogadores
@@ -110,7 +124,7 @@ class MainMenu:
         # Informação do número selecionado
         info_text = f"Jogadores selecionados: {self.selected_players}"
         info_surface = self.font_medium.render(info_text, True, WHITE)
-        info_rect = info_surface.get_rect(center=(SCREEN_WIDTH//2, 330))
+        info_rect = info_surface.get_rect(center=(self.screen_width//2, int(self.screen_height * 0.41)))
         self.screen.blit(info_surface, info_rect)
         
         # Botões principais
@@ -132,12 +146,13 @@ class MainMenu:
         # Instruções
         instructions = [
             "• Clique nos números ou use as teclas 3-6",
-            "• Enter para iniciar • ESC para sair"
+            "• Enter para iniciar • ESC para sair",
+            "• F11 para alternar tela cheia"
         ]
-        y = 520
+        y = int(self.screen_height * 0.65)
         for instruction in instructions:
             inst_surface = pygame.font.Font(None, 18).render(instruction, True, GRAY)
-            inst_rect = inst_surface.get_rect(center=(SCREEN_WIDTH//2, y))
+            inst_rect = inst_surface.get_rect(center=(self.screen_width//2, y))
             self.screen.blit(inst_surface, inst_rect)
             y += 20
     

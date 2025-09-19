@@ -20,6 +20,7 @@ class GameApp:
         pygame.mixer.pre_init()
         
         # Configuração da tela
+        self.fullscreen = False
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("War - Jogo de Estratégia")
         
@@ -73,6 +74,12 @@ class GameApp:
     
     def handle_event(self, event):
         """Processa eventos baseado na tela atual."""
+        # Eventos globais
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_F11:
+                self.toggle_fullscreen()
+        
+        # Eventos específicos da tela
         if self.current_screen == "menu":
             self.main_menu.handle_event(event)
         elif self.current_screen == "player_setup" and self.player_setup:
@@ -105,6 +112,30 @@ class GameApp:
             self.game_screen.render()
         
         pygame.display.flip()
+    
+    def toggle_fullscreen(self):
+        """Alterna entre modo janela e tela cheia."""
+        self.fullscreen = not self.fullscreen
+        if self.fullscreen:
+            self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        else:
+            self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        
+        # Obter novas dimensões da tela
+        screen_width, screen_height = self.screen.get_size()
+        
+        # Atualizar referência da tela e dimensões em todas as telas
+        self.main_menu.screen = self.screen
+        self.main_menu.update_dimensions(screen_width, screen_height)
+        if self.player_setup:
+            self.player_setup.screen = self.screen
+            self.player_setup.update_dimensions(screen_width, screen_height)
+        if self.dealer_selection:
+            self.dealer_selection.screen = self.screen
+            self.dealer_selection.update_dimensions(screen_width, screen_height)
+        if self.game_screen:
+            self.game_screen.screen = self.screen
+            self.game_screen.update_dimensions(screen_width, screen_height)
     
     def start_player_setup(self, num_players):
         """Inicia a tela de configuração dos jogadores."""

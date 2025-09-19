@@ -13,6 +13,9 @@ class PlayerSetupScreen:
         self.font_medium = pygame.font.Font(None, FONT_MEDIUM)
         self.font_small = pygame.font.Font(None, FONT_SMALL)
         
+        # Dimensões atuais da tela
+        self.screen_width, self.screen_height = screen.get_size()
+        
         # Configuração dos jogadores
         self.players_config = []
         self.current_player = 0
@@ -28,30 +31,36 @@ class PlayerSetupScreen:
         
         # Botões
         self.setup_buttons()
+    
+    def update_dimensions(self, screen_width, screen_height):
+        """Atualiza as dimensões da tela e reconfigura os botões."""
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.setup_buttons()
         
     def setup_buttons(self):
         """Configura os botões da tela."""
-        # Posicionamento relativo baseado na altura da tela
-        button_y_base = SCREEN_HEIGHT * 0.6  # 60% da altura da tela
-        button_y_confirm = SCREEN_HEIGHT * 0.7  # 70% da altura da tela
-        button_y_back = SCREEN_HEIGHT * 0.9  # 90% da altura para botão voltar
+        # Posicionamento relativo baseado na altura da tela com margem segura
+        button_y_base = self.screen_height * 0.6  # 60% da altura da tela
+        button_y_confirm = self.screen_height * 0.7  # 70% da altura da tela
+        button_y_back = self.screen_height * 0.85  # 85% da altura para botão voltar (mais seguro)
         
         if self.current_step == "name":
             self.buttons = {
-                "confirm": pygame.Rect(SCREEN_WIDTH//2 - 100, int(button_y_confirm), 200, BUTTON_HEIGHT),
-                "back": pygame.Rect(SCREEN_WIDTH * 0.05, int(button_y_back), int(SCREEN_WIDTH * 0.15), BUTTON_HEIGHT)
+                "confirm": pygame.Rect(self.screen_width//2 - 100, int(button_y_confirm), 200, BUTTON_HEIGHT),
+                "back": pygame.Rect(self.screen_width * 0.05, int(button_y_back), int(self.screen_width * 0.15), BUTTON_HEIGHT)
             }
         else:  # color
             # Botões de navegação de cor horizontalmente alinhados
             nav_button_y = int(button_y_base)
             nav_button_width = 120
-            spacing = (SCREEN_WIDTH - 2 * nav_button_width) // 3  # Espaçamento igual
+            spacing = (self.screen_width - 2 * nav_button_width) // 3  # Espaçamento igual
             
             self.buttons = {
                 "prev_color": pygame.Rect(spacing, nav_button_y, nav_button_width, BUTTON_HEIGHT),
-                "next_color": pygame.Rect(SCREEN_WIDTH - spacing - nav_button_width, nav_button_y, nav_button_width, BUTTON_HEIGHT),
-                "confirm": pygame.Rect(SCREEN_WIDTH//2 - 100, int(button_y_confirm), 200, BUTTON_HEIGHT),
-                "back": pygame.Rect(SCREEN_WIDTH * 0.05, int(button_y_back), int(SCREEN_WIDTH * 0.15), BUTTON_HEIGHT)
+                "next_color": pygame.Rect(self.screen_width - spacing - nav_button_width, nav_button_y, nav_button_width, BUTTON_HEIGHT),
+                "confirm": pygame.Rect(self.screen_width//2 - 100, int(button_y_confirm), 200, BUTTON_HEIGHT),
+                "back": pygame.Rect(self.screen_width * 0.05, int(button_y_back), int(self.screen_width * 0.15), BUTTON_HEIGHT)
             }
     
     def handle_event(self, event):
@@ -166,20 +175,20 @@ class PlayerSetupScreen:
         self.screen.fill(BLACK)
         
         # Layout baseado em proporções da tela
-        title_y = SCREEN_HEIGHT * 0.08  # 8% da altura
-        player_info_y = SCREEN_HEIGHT * 0.16  # 16% da altura
-        content_y = SCREEN_HEIGHT * 0.25  # 25% da altura para conteúdo principal
+        title_y = self.screen_height * 0.08  # 8% da altura
+        player_info_y = self.screen_height * 0.16  # 16% da altura
+        content_y = self.screen_height * 0.25  # 25% da altura para conteúdo principal
         
         # Título
         title_text = f"Configuração dos Jogadores ({self.current_player + 1}/{self.num_players})"
         title_surface = self.font_large.render(title_text, True, WHITE)
-        title_rect = title_surface.get_rect(center=(SCREEN_WIDTH//2, int(title_y)))
+        title_rect = title_surface.get_rect(center=(self.screen_width//2, int(title_y)))
         self.screen.blit(title_surface, title_rect)
         
         # Nome do jogador atual
         player_text = f"Jogador {self.current_player + 1}"
         player_surface = self.font_medium.render(player_text, True, WHITE)
-        player_rect = player_surface.get_rect(center=(SCREEN_WIDTH//2, int(player_info_y)))
+        player_rect = player_surface.get_rect(center=(self.screen_width//2, int(player_info_y)))
         self.screen.blit(player_surface, player_rect)
         
         if self.current_step == "name":
@@ -196,19 +205,19 @@ class PlayerSetupScreen:
     def render_name_input(self):
         """Renderiza a entrada de nome."""
         # Posicionamento baseado em proporções
-        instruction_y = SCREEN_HEIGHT * 0.32  # 32% da altura
-        input_y = SCREEN_HEIGHT * 0.42  # 42% da altura
+        instruction_y = self.screen_height * 0.32  # 32% da altura
+        input_y = self.screen_height * 0.42  # 42% da altura
         
         # Instrução
         instruction = "Digite o nome do jogador:"
         instruction_surface = self.font_medium.render(instruction, True, WHITE)
-        instruction_rect = instruction_surface.get_rect(center=(SCREEN_WIDTH//2, int(instruction_y)))
+        instruction_rect = instruction_surface.get_rect(center=(self.screen_width//2, int(instruction_y)))
         self.screen.blit(instruction_surface, instruction_rect)
         
         # Campo de entrada - tamanho proporcional à tela
-        input_width = min(400, SCREEN_WIDTH * 0.4)  # 40% da largura ou 400px máximo
+        input_width = min(400, self.screen_width * 0.4)  # 40% da largura ou 400px máximo
         input_height = 50
-        input_rect = pygame.Rect(SCREEN_WIDTH//2 - input_width//2, int(input_y), int(input_width), input_height)
+        input_rect = pygame.Rect(self.screen_width//2 - input_width//2, int(input_y), int(input_width), input_height)
         pygame.draw.rect(self.screen, WHITE, input_rect)
         pygame.draw.rect(self.screen, BLACK, input_rect, 3)
         
@@ -232,15 +241,15 @@ class PlayerSetupScreen:
     def render_color_selection(self):
         """Renderiza a seleção de cor."""
         # Posicionamento baseado em proporções
-        instruction_y = SCREEN_HEIGHT * 0.32  # 32% da altura
-        color_display_y = SCREEN_HEIGHT * 0.42  # 42% da altura
-        color_name_y = SCREEN_HEIGHT * 0.52  # 52% da altura
-        nav_instruction_y = SCREEN_HEIGHT * 0.57  # 57% da altura
+        instruction_y = self.screen_height * 0.32  # 32% da altura
+        color_display_y = self.screen_height * 0.42  # 42% da altura
+        color_name_y = self.screen_height * 0.52  # 52% da altura
+        nav_instruction_y = self.screen_height * 0.57  # 57% da altura
         
         # Instrução
         instruction = f"Escolha a cor para {self.text_input}:"
         instruction_surface = self.font_medium.render(instruction, True, WHITE)
-        instruction_rect = instruction_surface.get_rect(center=(SCREEN_WIDTH//2, int(instruction_y)))
+        instruction_rect = instruction_surface.get_rect(center=(self.screen_width//2, int(instruction_y)))
         self.screen.blit(instruction_surface, instruction_rect)
         
         # Cor atual
@@ -248,20 +257,20 @@ class PlayerSetupScreen:
         color_rgb = PLAYER_COLORS.get(current_color, WHITE)
         
         # Quadrado da cor - tamanho proporcional
-        color_size = min(120, int(SCREEN_WIDTH * 0.08))
-        color_rect = pygame.Rect(SCREEN_WIDTH//2 - color_size//2, int(color_display_y), color_size, int(color_size * 0.6))
+        color_size = min(120, int(self.screen_width * 0.08))
+        color_rect = pygame.Rect(self.screen_width//2 - color_size//2, int(color_display_y), color_size, int(color_size * 0.6))
         pygame.draw.rect(self.screen, color_rgb, color_rect)
         pygame.draw.rect(self.screen, WHITE, color_rect, 3)
         
         # Nome da cor
         color_name_surface = self.font_medium.render(current_color.title(), True, WHITE)
-        color_name_rect = color_name_surface.get_rect(center=(SCREEN_WIDTH//2, int(color_name_y)))
+        color_name_rect = color_name_surface.get_rect(center=(self.screen_width//2, int(color_name_y)))
         self.screen.blit(color_name_surface, color_name_rect)
         
         # Instruções de navegação
         nav_text = "Use ← → ou clique nos botões para navegar"
         nav_surface = self.font_small.render(nav_text, True, GRAY)
-        nav_rect = nav_surface.get_rect(center=(SCREEN_WIDTH//2, int(nav_instruction_y)))
+        nav_rect = nav_surface.get_rect(center=(self.screen_width//2, int(nav_instruction_y)))
         self.screen.blit(nav_surface, nav_rect)
     
     def render_buttons(self):
@@ -299,12 +308,12 @@ class PlayerSetupScreen:
             return
         
         # Posicionar na lateral direita de forma proporcional
-        sidebar_width = SCREEN_WIDTH * 0.25  # 25% da largura para sidebar
-        x_start = SCREEN_WIDTH - sidebar_width + 20
-        y_start = SCREEN_HEIGHT * 0.25  # Começar em 25% da altura
+        sidebar_width = self.screen_width * 0.25  # 25% da largura para sidebar
+        x_start = self.screen_width - sidebar_width + 20
+        y_start = self.screen_height * 0.25  # Começar em 25% da altura
         
         # Verificar se cabe na tela
-        max_height = SCREEN_HEIGHT * 0.4  # Máximo 40% da altura disponível
+        max_height = self.screen_height * 0.4  # Máximo 40% da altura disponível
         item_height = 25
         max_items = int(max_height / item_height)
         
