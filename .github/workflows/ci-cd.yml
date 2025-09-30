@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - War Board Game
+name: CI/CD Pipeline
 
 on:
   push:
