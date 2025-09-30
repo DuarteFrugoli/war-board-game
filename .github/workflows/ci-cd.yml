@@ -10,22 +10,19 @@ env:
   PYTHON_VERSION: "3.11"
 
 jobs:
-  # Trabalho 1: Testes (com matriz para executar em paralelo)
+  # Trabalho 1: Testes (apenas Python 3.11)
   tests:
     name: "Executar Testes"
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12"]
     
     steps:
     - name: Checkout do código
       uses: actions/checkout@v4
     
-    - name: Configurar Python ${{ matrix.python-version }}
+    - name: Configurar Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.11"
     
     - name: Instalar dependências do sistema para pygame
       run: |
@@ -54,7 +51,7 @@ jobs:
     - name: Upload do relatório de testes
       uses: actions/upload-artifact@v4
       with:
-        name: test-report-python-${{ matrix.python-version }}
+        name: test-report-python-3.11
         path: test_report.txt
         retention-days: 30
 
