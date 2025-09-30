@@ -2,8 +2,8 @@
 # Testes para a classe Deck
 
 import unittest
-from war.Card import Card
-from war.Deck import Deck
+from war.card import Card
+from war.deck import Deck
 
 class TestDeck(unittest.TestCase):
 

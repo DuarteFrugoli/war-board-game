@@ -3,11 +3,11 @@
 
 import unittest
 from unittest.mock import patch, MagicMock
-from war.Game import Game
-from war.Player import Player
-from war.Territory import Territory
-from war.Card import Card
-from war.Deck import Deck
+from war.game import Game
+from war.player import Player
+from war.territory import Territory
+from war.card import Card
+from war.deck import Deck
 
 class TestGame(unittest.TestCase):
 
@@ -17,8 +17,8 @@ class TestGame(unittest.TestCase):
         self.players = [self.player1, self.player2]
         self.dealer = self.player1
 
-    @patch('war.Game.load_map_data')
-    @patch('war.Game.load_missions')
+    @patch('war.game.load_map_data')
+    @patch('war.game.load_missions')
     def test_game_initialization(self, mock_missions, mock_map):
         mock_map.return_value = {
             'territories': [
@@ -42,8 +42,8 @@ class TestGame(unittest.TestCase):
         self.assertIsNotNone(game.cards)
         self.assertIsInstance(game.deck, Deck)
 
-    @patch('war.Game.load_map_data')
-    @patch('war.Game.load_missions')
+    @patch('war.game.load_map_data')
+    @patch('war.game.load_missions')
     def test_create_territories(self, mock_missions, mock_map):
         mock_map.return_value = {
             'territories': [
@@ -64,8 +64,8 @@ class TestGame(unittest.TestCase):
         self.assertEqual(territories[0].borders, ['Argentina'])
         self.assertEqual(territories[1].name, 'Argentina')
 
-    @patch('war.Game.load_map_data')
-    @patch('war.Game.load_missions')
+    @patch('war.game.load_map_data')
+    @patch('war.game.load_missions')
     def test_create_cards(self, mock_missions, mock_map):
         mock_map.return_value = {
             'territories': [

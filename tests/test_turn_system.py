@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
-from war.Game import Game
-from war.Player import Player
-from war.Territory import Territory
+from war.game import Game
+from war.player import Player
+from war.territory import Territory
 
 
 class TestTurnSystem(unittest.TestCase):

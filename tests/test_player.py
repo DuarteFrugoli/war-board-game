@@ -1,7 +1,7 @@
 
 import unittest
-from war.Player import Player
-from war.Territory import Territory
+from war.player import Player
+from war.territory import Territory
 
 class TestPlayer(unittest.TestCase):
 

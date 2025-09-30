@@ -2,8 +2,8 @@
 # Testes para a classe Territory
 
 import unittest
-from war.Territory import Territory
-from war.Player import Player
+from war.territory import Territory
+from war.player import Player
 
 class TestTerritory(unittest.TestCase):
 

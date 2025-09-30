@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 from war.utils import roll_die, roll_multiple_dice, get_continent_bonus, player_owns_continent, get_continent_controller
-from war.Player import Player
-from war.Territory import Territory
+from war.player import Player
+from war.territory import Territory
 
 class TestUtilsRolling(unittest.TestCase):
 

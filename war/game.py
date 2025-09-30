@@ -1,7 +1,7 @@
 import random
-from .Territory import Territory
-from .Card import Card
-from .Deck import Deck
+from .territory import Territory
+from .card import Card
+from .deck import Deck
 from .utils_data import load_map_data, load_missions
 
 

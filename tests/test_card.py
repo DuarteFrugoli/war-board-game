@@ -2,7 +2,7 @@
 # Testes para a classe Card
 
 import unittest
-from war.Card import Card
+from war.card import Card
 
 class TestCard(unittest.TestCase):
 
