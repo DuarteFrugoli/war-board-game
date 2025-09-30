@@ -106,8 +106,7 @@ class Game:
                 territory.troops += army_count
                 return
         raise ValueError(
-            f"Territory {territory_name} not owned by player {
-                player.name}")
+            f"Territory {territory_name} not owned by player {player.name}")
 
     def phase_2_attack(self, player):
         """Etapa 2: Fase de ataque (opcional)."""
