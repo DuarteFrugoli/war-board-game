@@ -1,7 +1,7 @@
 # Cores disponíveis para os jogadores
 COLORS = [
     "Vermelho",
-    "Azul", 
+    "Azul",
     "Verde",
     "Amarelo",
     "Preto",

@@ -18,11 +18,11 @@ class Player:
     def get_territory_count(self):
         """Retorna quantos territórios o player possui."""
         return len(self.territories)
-    
+
     def get_total_troops(self):
         """Retorna o total de tropas do player."""
         return sum(territory.troops for territory in self.territories)
-    
+
     def owns_continent(self, continent_name, map_data):
         """Verifica se o player possui todos os territórios de um continente."""
         continent_territories = None
@@ -30,11 +30,12 @@ class Player:
             if continent['name'] == continent_name:
                 continent_territories = set(continent['territories'])
                 break
-        
+
         if not continent_territories:
             return False
-        
-        player_territory_names = {territory.name for territory in self.territories}
+
+        player_territory_names = {
+            territory.name for territory in self.territories}
         return continent_territories.issubset(player_territory_names)
 
     def atacar(self, jogador, unidades):
@@ -47,7 +48,9 @@ class Player:
             if territory.name == territory_name:
                 territory.troops += unidades
                 return
-        raise ValueError(f"Territory {territory_name} not owned by player {self.name}")
+        raise ValueError(
+            f"Territory {territory_name} not owned by player {
+                self.name}")
 
     def moverTropas(self, from_territory, to_territory, unidades):
         """Move tropas entre territórios do jogador."""

@@ -10,6 +10,7 @@ def get_number_of_players():
         except ValueError:
             print("Por favor, digite um número válido.")
 
+
 def create_players(num_players, colors, Player):
     """Cria os jogadores com nome e cor."""
     players = []
@@ -34,6 +35,7 @@ def create_players(num_players, colors, Player):
         players.append(Player(name, selected_color))
     return players
 
+
 def determine_card_dealer(players, roll_die):
     """Determina quem será o entregador de cartas através de dados."""
     print("\n--- Determinando o entregador de cartas ---")
@@ -47,9 +49,13 @@ def determine_card_dealer(players, roll_die):
         winners = [result for result in results if result[1] == max_roll]
         if len(winners) == 1:
             dealer = winners[0][0]
-            print(f"\n{dealer.name} ({dealer.color}) será o entregador de cartas!")
+            print(
+                f"\n{
+                    dealer.name} ({
+                    dealer.color}) será o entregador de cartas!")
             return dealer
-        print(f"\nEmpate com {max_roll}! Os seguintes jogadores vão rolar novamente:")
+        print(
+            f"\nEmpate com {max_roll}! Os seguintes jogadores vão rolar novamente:")
         players = [winner[0] for winner in winners]
         for player in players:
             print(f"- {player.name} ({player.color})")

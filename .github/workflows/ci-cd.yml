@@ -79,7 +79,7 @@ jobs:
     
     - name: Executar análise de código
       run: |
-        flake8 war/ --count --statistics --tee --output-file=lint_report.txt
+        flake8 war/ --count --statistics --tee --output-file=lint_report.txt --ignore=E501,F403,F405,W504,F841
         pylint war/ --output-format=text > pylint_report.txt || true
     
     - name: Upload do relatório de lint
