@@ -52,7 +52,7 @@ jobs:
         SDL_VIDEODRIVER: "dummy"
     
     - name: Upload do relatório de testes
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-report-python-${{ matrix.python-version }}
         path: test_report.txt
@@ -83,7 +83,7 @@ jobs:
         pylint war/ --output-format=text > pylint_report.txt || true
     
     - name: Upload do relatório de lint
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: lint-reports
         path: |
@@ -183,7 +183,7 @@ jobs:
         cd .. && ls -la dist/
     
     - name: Upload do pacote como artefato
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: war-game-package
         path: dist/war-game-v${{ github.run_number }}.tar.gz
