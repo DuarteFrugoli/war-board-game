@@ -33,9 +33,19 @@ jobs:
       run: |
         chmod +x ./scripts/install_dependencies.sh
         ./scripts/install_dependencies.sh
+        
+        # Verificar se as dependências foram instaladas
+        echo "Verificando instalação do pygame..."
+        python -c "import pygame; print(f'pygame {pygame.version.ver} instalado')"
     
     - name: Executar testes unitários
       run: |
+        echo "Configurando PYTHONPATH..."
+        export PYTHONPATH="${PYTHONPATH}:$(pwd)"
+        
+        echo "Testando imports..."
+        python -c "import war; print('war module imported successfully')"
+        
         echo "Executando testes unitários..."
         python -m unittest discover tests/ -v > test_report.txt 2>&1
         test_exit_code=$?
