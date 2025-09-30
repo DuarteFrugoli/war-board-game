@@ -49,8 +49,7 @@ class Player:
                 territory.troops += unidades
                 return
         raise ValueError(
-            f"Territory {territory_name} not owned by player {
-                self.name}")
+            f"Territory {territory_name} not owned by player {self.name}")
 
     def moverTropas(self, from_territory, to_territory, unidades):
         """Move tropas entre territórios do jogador."""
