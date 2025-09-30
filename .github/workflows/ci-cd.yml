@@ -43,19 +43,40 @@ jobs:
         echo "Configurando PYTHONPATH..."
         export PYTHONPATH="${PYTHONPATH}:$(pwd)"
         
-        echo "Testando imports..."
-        python -c "import war; print('war module imported successfully')"
+        echo "Testando imports dos módulos principais..."
+        python -c "import war; print('war module OK')"
+        python -c "from war.Card import Card; print('Card OK')"
+        python -c "from war.Player import Player; print('Player OK')"
+        python -c "from war.Game import Game; print('Game OK')"
+        python -c "from war.Territory import Territory; print('Territory OK')"
         
-        echo "Executando testes unitários..."
-        python -m unittest discover tests/ -v > test_report.txt 2>&1
-        test_exit_code=$?
+        echo "Verificando estrutura de testes..."
+        ls -la tests/
+        
+        echo "Testando descoberta de testes..."
+        python -m unittest discover tests/ --verbose --start-directory=. --pattern="test*.py" 2>&1 | tee test_output.txt
+        test_exit_code=${PIPESTATUS[0]}
+        
+        echo "=== SAÍDA COMPLETA DOS TESTES ==="
+        cat test_output.txt
+        echo "=== FIM DA SAÍDA ==="
+        
+        # Copiar para relatório final
+        cp test_output.txt test_report.txt
         echo "Exit code: $test_exit_code" >> test_report.txt
         
-        # Mostrar resultados
-        echo "=== RESULTADOS DOS TESTES ==="
-        cat test_report.txt
+        # Mostrar informações de debug se falhou
+        if [ $test_exit_code -ne 0 ]; then
+          echo "=== DEBUG - ESTRUTURA DO PROJETO ==="
+          find . -name "*.py" -type f | head -20
+          echo "=== DEBUG - PYTHONPATH ==="
+          echo $PYTHONPATH
+          echo "=== DEBUG - VERSÃO PYTHON ==="
+          python --version
+          echo "=== DEBUG - PACOTES INSTALADOS ==="
+          pip list | grep -E "(pygame|coverage|pytest)"
+        fi
         
-        # Falhar se testes falharam
         exit $test_exit_code
     
     - name: Upload do relatório de testes
