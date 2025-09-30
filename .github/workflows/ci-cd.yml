@@ -24,29 +24,29 @@ jobs:
       with:
         python-version: "3.11"
     
-    - name: Instalar dependências do sistema para pygame
+    - name: Instalar dependências do sistema
       run: |
         sudo apt-get update
-        sudo apt-get install -y python3-dev python3-pygame libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libfreetype6-dev python3-setuptools python3-numpy python3-opengl libgl1-mesa-dev libgles2-mesa-dev
-        # Configurar display virtual para pygame
-        sudo apt-get install -y xvfb
+        sudo apt-get install -y python3-dev
     
     - name: Instalar dependências via script
       run: |
         chmod +x ./scripts/install_dependencies.sh
         ./scripts/install_dependencies.sh
     
-    - name: Executar testes com display virtual
+    - name: Executar testes unitários
       run: |
-        # Configurar display virtual para pygame
-        export DISPLAY=:99
-        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-        sleep 3
-        # Executar testes
+        echo "Executando testes unitários..."
         python -m unittest discover tests/ -v > test_report.txt 2>&1
-        echo "Exit code: $?" >> test_report.txt
-      env:
-        SDL_VIDEODRIVER: "dummy"
+        test_exit_code=$?
+        echo "Exit code: $test_exit_code" >> test_report.txt
+        
+        # Mostrar resultados
+        echo "=== RESULTADOS DOS TESTES ==="
+        cat test_report.txt
+        
+        # Falhar se testes falharam
+        exit $test_exit_code
     
     - name: Upload do relatório de testes
       uses: actions/upload-artifact@v4
