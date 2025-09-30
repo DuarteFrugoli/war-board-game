@@ -10,7 +10,7 @@ env:
   PYTHON_VERSION: "3.11"
 
 jobs:
-  # Trabalho 1: Testes (apenas Python 3.11)
+  # Job 1: Testes
   tests:
     name: "Executar Testes"
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ for file in files:
         echo "Verificando estrutura de testes..."
         ls -la tests/
         
-        echo "Testando descoberta de testes..."
+        echo "Executando testes unitários..."
         python -m unittest discover tests/ --verbose --start-directory=. --pattern="test*.py" 2>&1 | tee test_output.txt
         test_exit_code=${PIPESTATUS[0]}
         
@@ -104,11 +104,10 @@ for file in files:
         path: test_report.txt
         retention-days: 30
 
-  # Job 2: Build/Empacotamento (executa em paralelo com testes)
+  # Job 2: Build e Empacotamento
   build:
     name: "Build e Empacotamento"
     runs-on: ubuntu-latest
-    # Removido 'needs: [tests]' para executar em paralelo
     
     steps:
     - name: Checkout do código
@@ -203,12 +202,12 @@ for file in files:
         path: dist/war-game-v${{ github.run_number }}.tar.gz
         retention-days: 90
 
-  # Job 3: Notificação por email (depende de todos os outros jobs)
+  # Job 3: Notificação por email
   notification:
     name: "Envio de Notificação"
     runs-on: ubuntu-latest
     needs: [tests, build]
-    if: always() # Executa mesmo se algum job falhar
+    if: always()
     
     steps:
     - name: Checkout do código

@@ -1,0 +1,21 @@
+name: Test Simple
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  simple-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    - name: Test imports
+      run: |
+        echo "Testing basic imports..."
+        python -c "import war; print('war module OK')"
+        python -c "from war.card import Card; print('Card import OK')"
+        python -c "from war.player import Player; print('Player import OK')"
+        echo "All imports successful!"
