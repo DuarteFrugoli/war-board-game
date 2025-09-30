@@ -205,8 +205,7 @@ class Game:
         # Etapa 1: Distribuir exércitos
         armies_to_place = self.phase_1_distribute_armies(player)
         print(
-            f"Etapa 1: {
-                player.name} recebe {armies_to_place} exércitos para distribuir")
+            f"Etapa 1: {player.name} recebe {armies_to_place} exércitos para distribuir")
 
         # Etapa 2: Atacar (retorna quantos territórios foram conquistados)
         print("Etapa 2: Fase de ataque")
