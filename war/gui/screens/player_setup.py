@@ -19,7 +19,7 @@ class PlayerSetupScreen:
         # Configuração dos jogadores
         self.players_config = []
         self.current_player = 0
-        self.current_step = "name"  # "name" ou "color"
+        self.current_step = "name"  # "nome" ou "cor"
 
         # Cores disponíveis
         self.available_colors = [

@@ -1,4 +1,4 @@
-# territory.py
+# territorio.py
 class Territory:
     def __init__(self, name, continent, borders=None):
         self.name = name

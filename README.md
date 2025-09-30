@@ -1,3 +1,5 @@
+[![CI/CD Pipeline](https://github.com/DuarteFrugoli/war-board-game/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/DuarteFrugoli/war-board-game/actions/workflows/ci-cd.yml)
+
 # Projeto War - Teste de Versionamento e Testes Unitários
 
 Este projeto tem como objetivo testar práticas de versionamento de código e implementação de testes unitários, utilizando o jogo de tabuleiro War como base para o desenvolvimento.

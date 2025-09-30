@@ -18,7 +18,7 @@ class DealerSelectionScreen:
         self.screen_width, self.screen_height = screen.get_size()
 
         # Estado da determinação
-        self.phase = "intro"  # "intro", "playing", "final"
+        self.phase = "intro"  # "intro", "jogando", "final"
         # Índices dos jogadores ativos
         self.current_players = list(range(len(players_config)))
         self.rolls = {}  # {player_index: roll_value}

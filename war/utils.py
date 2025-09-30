@@ -2,16 +2,16 @@ import random
 
 
 def roll_die():
-    """Rolls a 6-sided die and returns the result."""
+    """Rola um dado de 6 lados e retorna o resultado."""
     return random.randint(1, 6)
 
 
 def roll_multiple_dice(quantity):
-    """Rolls several 6-sided dice and returns a list with the results."""
+    """Rola vários dados de 6 lados e retorna uma lista com os resultados."""
     return [roll_die() for _ in range(quantity)]
 
 
-# Continent-related utilities
+# Utilidades relacionadas aos continentes
 CONTINENT_BONUS = {
     'América do Sul': 2,
     'América do Norte': 5,

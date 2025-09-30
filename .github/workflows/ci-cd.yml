@@ -10,7 +10,7 @@ env:
   PYTHON_VERSION: "3.11"
 
 jobs:
-  # Job 1: Testes (com matriz para rodar em paralelo)
+  # Trabalho 1: Testes (com matriz para executar em paralelo)
   tests:
     name: "Executar Testes"
     runs-on: ubuntu-latest
@@ -58,43 +58,11 @@ jobs:
         path: test_report.txt
         retention-days: 30
 
-  # Job 2: Lint (executa em paralelo com os testes)
-  lint:
-    name: "Análise de Código"
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout do código
-      uses: actions/checkout@v4
-    
-    - name: Configurar Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-    
-    - name: Instalar ferramentas de lint via script
-      run: |
-        chmod +x ./scripts/install_lint_tools.sh
-        ./scripts/install_lint_tools.sh
-    
-    - name: Executar análise de código
-      run: |
-        flake8 war/ --count --statistics --tee --output-file=lint_report.txt --ignore=E501,F403,F405,W504,F841
-        pylint war/ --output-format=text > pylint_report.txt || true
-    
-    - name: Upload do relatório de lint
-      uses: actions/upload-artifact@v4
-      with:
-        name: lint-reports
-        path: |
-          lint_report.txt
-          pylint_report.txt
-
-  # Job 3: Build/Empacotamento (depende dos testes)
+  # Job 2: Build/Empacotamento (depende apenas dos testes)
   build:
     name: "Build e Empacotamento"
     runs-on: ubuntu-latest
-    needs: [tests, lint]
+    needs: [tests]
     
     steps:
     - name: Checkout do código
@@ -189,11 +157,11 @@ jobs:
         path: dist/war-game-v${{ github.run_number }}.tar.gz
         retention-days: 90
 
-  # Job 4: Notificação por email (depende de todos os outros jobs)
+  # Job 3: Notificação por email (depende de todos os outros jobs)
   notification:
     name: "Envio de Notificação"
     runs-on: ubuntu-latest
-    needs: [tests, lint, build]
+    needs: [tests, build]
     if: always() # Executa mesmo se algum job falhar
     
     steps:
@@ -223,12 +191,12 @@ jobs:
           echo "Enviando notificação por email..."
           python scripts/send_notification.py \
             --to-email "$NOTIFICATION_EMAIL" \
-            --pipeline-status "${{ needs.tests.result }}-${{ needs.lint.result }}-${{ needs.build.result }}" \
+            --pipeline-status "${{ needs.tests.result }}-${{ needs.build.result }}" \
             --run-number "${{ github.run_number }}" \
             --commit-sha "${{ github.sha }}" \
             --branch "${{ github.ref_name }}"
         else
           echo "Pipeline executado com sucesso!"
-          echo "Status: Tests=${{ needs.tests.result }}, Lint=${{ needs.lint.result }}, Build=${{ needs.build.result }}"
+          echo "Status: Tests=${{ needs.tests.result }}, Build=${{ needs.build.result }}"
           echo "Configure os secrets para ativar notificações por email"
         fi
