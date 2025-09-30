@@ -55,11 +55,11 @@ jobs:
         path: test_report.txt
         retention-days: 30
 
-  # Job 2: Build/Empacotamento (depende apenas dos testes)
+  # Job 2: Build/Empacotamento (executa em paralelo com testes)
   build:
     name: "Build e Empacotamento"
     runs-on: ubuntu-latest
-    needs: [tests]
+    # Removido 'needs: [tests]' para executar em paralelo
     
     steps:
     - name: Checkout do código
