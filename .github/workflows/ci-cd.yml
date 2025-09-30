@@ -1,0 +1,230 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  # Trabalho 1: Testes (apenas Python 3.11)
+  tests:
+    name: "Executar Testes"
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+    
+    - name: Configurar Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    
+    - name: Instalar dependências do sistema
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-dev
+    
+    - name: Instalar dependências via script
+      run: |
+        chmod +x ./scripts/install_dependencies.sh
+        ./scripts/install_dependencies.sh
+        
+        # Verificar se as dependências foram instaladas
+        echo "Verificando instalação do pygame..."
+        python -c "import pygame; print(f'pygame {pygame.version.ver} instalado')"
+    
+    - name: Executar testes unitários
+      run: |
+        echo "Configurando PYTHONPATH..."
+        export PYTHONPATH="${PYTHONPATH}:$(pwd)"
+        
+        echo "Testando imports dos módulos principais..."
+        python -c "import war; print('war module OK')"
+        python -c "from war.card import Card; print('Card OK')"
+        python -c "from war.player import Player; print('Player OK')"
+        python -c "from war.game import Game; print('Game OK')"
+        python -c "from war.territory import Territory; print('Territory OK')"
+        
+        echo "Verificando estrutura de testes..."
+        ls -la tests/
+        
+        echo "Testando descoberta de testes..."
+        python -m unittest discover tests/ --verbose --start-directory=. --pattern="test*.py" 2>&1 | tee test_output.txt
+        test_exit_code=${PIPESTATUS[0]}
+        
+        echo "=== SAÍDA COMPLETA DOS TESTES ==="
+        cat test_output.txt
+        echo "=== FIM DA SAÍDA ==="
+        
+        # Copiar para relatório final
+        cp test_output.txt test_report.txt
+        echo "Exit code: $test_exit_code" >> test_report.txt
+        
+        # Mostrar informações de debug se falhou
+        if [ $test_exit_code -ne 0 ]; then
+          echo "=== DEBUG - ESTRUTURA DO PROJETO ==="
+          find . -name "*.py" -type f | head -20
+          echo "=== DEBUG - PYTHONPATH ==="
+          echo $PYTHONPATH
+          echo "=== DEBUG - VERSÃO PYTHON ==="
+          python --version
+          echo "=== DEBUG - PACOTES INSTALADOS ==="
+          pip list | grep -E "(pygame|coverage|pytest)"
+        fi
+        
+        exit $test_exit_code
+    
+    - name: Upload do relatório de testes
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-report-python-3.11
+        path: test_report.txt
+        retention-days: 30
+
+  # Job 2: Build/Empacotamento (executa em paralelo com testes)
+  build:
+    name: "Build e Empacotamento"
+    runs-on: ubuntu-latest
+    # Removido 'needs: [tests]' para executar em paralelo
+    
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+    
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Instalar ferramentas de build via script
+      run: |
+        chmod +x ./scripts/install_build_tools.sh
+        ./scripts/install_build_tools.sh
+    
+    - name: Criar pacote da aplicação
+      run: |
+        # Criar estrutura do pacote
+        mkdir -p dist/war-game
+        cp -r war/ dist/war-game/
+        cp main.py dist/war-game/
+        cp README.md dist/war-game/
+        cp requirements.txt dist/war-game/
+        cp -r data/ dist/war-game/ 2>/dev/null || true
+        
+        # Criar arquivo de instalação
+        cat > dist/war-game/install.sh << 'EOF'
+        #!/bin/bash
+        echo "Instalando War Board Game..."
+        pip install pygame>=2.6.0
+        echo "Instalação concluída!"
+        echo "Para executar: python main.py"
+        EOF
+        chmod +x dist/war-game/install.sh
+        
+        # Criar arquivo executável
+        cat > dist/war-game/run_game.py << 'EOF'
+        #!/usr/bin/env python3
+        """
+        War Board Game - Launcher
+        """
+        import sys
+        import os
+        
+        # Adicionar diretório do jogo ao path
+        game_dir = os.path.dirname(os.path.abspath(__file__))
+        sys.path.insert(0, game_dir)
+        
+        try:
+            import pygame
+            print("Iniciando War Board Game...")
+            from main import main
+            if __name__ == "__main__":
+                main()
+        except ImportError as e:
+            print(f"Erro: {e}")
+            print("Execute 'pip install pygame' para instalar as dependências")
+            sys.exit(1)
+        except Exception as e:
+            print(f"Erro ao executar o jogo: {e}")
+            sys.exit(1)
+        EOF
+        chmod +x dist/war-game/run_game.py
+        
+        # Criar arquivo README para o pacote
+        cat > dist/war-game/README_PACKAGE.md << 'EOF'
+        # War Board Game - Pacote Distribuível
+        
+        ## Instalação:
+        1. Execute: `./install.sh` (ou `pip install pygame>=2.6.0`)
+        2. Execute: `python main.py` ou `python run_game.py`
+        
+        ## Requisitos:
+        - Python 3.9+
+        - pygame 2.6.0+
+        
+        ## Estrutura:
+        - `main.py` - Arquivo principal do jogo
+        - `war/` - Módulos do jogo
+        - `data/` - Dados do jogo (mapas, missões)
+        - `tests/` - Testes unitários
+        EOF
+        
+        # Criar arquivo tar.gz
+        cd dist && tar -czf war-game-v${{ github.run_number }}.tar.gz war-game/
+        cd .. && ls -la dist/
+    
+    - name: Upload do pacote como artefato
+      uses: actions/upload-artifact@v4
+      with:
+        name: war-game-package
+        path: dist/war-game-v${{ github.run_number }}.tar.gz
+        retention-days: 90
+
+  # Job 3: Notificação por email (depende de todos os outros jobs)
+  notification:
+    name: "Envio de Notificação"
+    runs-on: ubuntu-latest
+    needs: [tests, build]
+    if: always() # Executa mesmo se algum job falhar
+    
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+    
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Instalar dependências para notificação
+      run: |
+        python -m pip install --upgrade pip
+        # smtplib já vem incluído no Python
+    
+    - name: Executar notificação
+      continue-on-error: true
+      env:
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        SMTP_SERVER: smtp.gmail.com
+        SMTP_PORT: 587
+        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+        NOTIFICATION_EMAIL: ${{ secrets.NOTIFICATION_EMAIL }}
+      run: |
+        if [ -n "$NOTIFICATION_EMAIL" ] && [ -n "$FROM_EMAIL" ] && [ -n "$EMAIL_PASSWORD" ]; then
+          echo "Enviando notificação por email..."
+          python scripts/send_notification.py \
+            --to-email "$NOTIFICATION_EMAIL" \
+            --pipeline-status "${{ needs.tests.result }}-${{ needs.build.result }}" \
+            --run-number "${{ github.run_number }}" \
+            --commit-sha "${{ github.sha }}" \
+            --branch "${{ github.ref_name }}"
+        else
+          echo "Pipeline executado com sucesso!"
+          echo "Status: Tests=${{ needs.tests.result }}, Build=${{ needs.build.result }}"
+          echo "Configure os secrets para ativar notificações por email"
+        fi
