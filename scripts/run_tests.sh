@@ -30,24 +30,19 @@ log_info "Executando testes unitários..."
 # Criar diretório para relatórios
 mkdir -p reports
 
-# Executar testes com coverage
-log_info "Executando testes com cobertura..."
-python -m pytest tests/ \
-    --verbose \
-    --tb=short \
-    --cov=war \
-    --cov-report=term-missing \
-    --cov-report=html:reports/coverage_html \
-    --cov-report=xml:reports/coverage.xml \
-    --junitxml=reports/junit.xml \
-    2>&1 | tee reports/test_output.txt
+# Executar testes com unittest
+log_info "Executando testes com unittest..."
+python -m unittest discover tests/ -v 2>&1 | tee reports/test_output.txt
 
 test_exit_code=${PIPESTATUS[0]}
 
-# Gerar relatório de cobertura em texto
-if command -v coverage &> /dev/null; then
-    log_info "Gerando relatório de cobertura..."
-    coverage report > reports/coverage_report.txt 2>&1 || true
+# Gerar relatório simples
+log_info "Gerando relatório de testes..."
+echo "Testes executados em $(date)" > reports/test_summary.txt
+if [ $test_exit_code -eq 0 ]; then
+    echo "Status: SUCESSO - Todos os testes passaram" >> reports/test_summary.txt
+else
+    echo "Status: FALHA - Alguns testes falharam" >> reports/test_summary.txt
 fi
 
 # Resumo dos resultados
@@ -59,11 +54,11 @@ else
     log_error "Alguns testes falharam (código de saída: $test_exit_code)"
 fi
 
-# Mostrar estatísticas de cobertura se disponível
-if [ -f "reports/coverage_report.txt" ]; then
+# Mostrar resumo dos testes
+if [ -f "reports/test_summary.txt" ]; then
     echo ""
-    echo "================ COBERTURA DE CÓDIGO ================"
-    tail -n 10 reports/coverage_report.txt
+    echo "================ RESUMO DOS TESTES ================"
+    cat reports/test_summary.txt
 fi
 
 # Listar arquivos de relatório gerados
@@ -81,8 +76,8 @@ if [ $test_exit_code -ne 0 ]; then
     echo "PYTHONPATH: $PYTHONPATH"
     echo "Python version: $(python --version)"
     echo ""
-    echo "Pacotes instalados (pygame, coverage, pytest):"
-    pip list | grep -E "(pygame|coverage|pytest)" || echo "Nenhum pacote encontrado"
+    echo "Pacotes instalados (pygame):"
+    pip list | grep -E "(pygame)" || echo "Nenhum pacote encontrado"
 fi
 
 exit $test_exit_code

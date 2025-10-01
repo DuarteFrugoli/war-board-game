@@ -32,18 +32,13 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "coverage>=7.0.0",
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
     "black>=23.0.0",
     "flake8>=6.0.0",
     "mypy>=1.0.0",
 ]
 
 test = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "coverage>=7.0.0",
+    # unittest é built-in do Python, não precisa instalar
 ]
 
 [project.scripts]
@@ -61,44 +56,6 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["war*"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = [
-    "--verbose",
-    "--tb=short",
-    "--strict-markers",
-    "--cov=war",
-    "--cov-report=term-missing",
-    "--cov-report=html:htmlcov",
-]
-
-[tool.coverage.run]
-source = ["war"]
-omit = [
-    "tests/*",
-    "*/tests/*",
-    "*/__pycache__/*",
-    "*/venv/*",
-    "*/env/*",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-]
 
 [tool.black]
 line-length = 88

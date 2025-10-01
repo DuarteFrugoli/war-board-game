@@ -11,9 +11,8 @@ Este projeto implementa o clássico jogo de tabuleiro **War** (conhecido como Ri
 
 - Versionamento de código com Git e GitHub
 - Gerenciamento de dependências com pyproject.toml
-- Testes unitários com pytest (56 testes implementados)
+- Testes unitários com unittest (56 testes implementados)
 - CI/CD Pipeline com GitHub Actions
-- Cobertura de testes com pytest-cov
 
 ## Como Executar
 
@@ -52,20 +51,17 @@ pytest tests/
 python main.py
 ```
 
-### Instalação com Scripts (Linux/macOS)
+### Comandos de Desenvolvimento
 
 ```bash
-# Configurar ambiente automaticamente
-chmod +x scripts/setup_environment.sh
-./scripts/setup_environment.sh
+# Instalar dependências de desenvolvimento
+pip install -e ".[dev]"
 
-# Executar testes com relatórios
-chmod +x scripts/run_tests.sh
-./scripts/run_tests.sh
+# Executar testes unitários
+python -m unittest discover tests/ -v
 
-# Criar pacote de distribuição
-chmod +x scripts/create_package.sh
-./scripts/create_package.sh
+# Executar teste específico
+python -m unittest tests.test_game.TestGame.test_game_initialization -v
 ```
 
 ## Como Jogar
@@ -107,11 +103,10 @@ war-board-game/
 ├── 📁 data/               # Dados do jogo
 │   ├── map.json          # Configuração do mapa
 │   └── missions.json     # Missões disponíveis
-├── 📁 scripts/           # Scripts de automação
-│   ├── setup_environment.sh    # Configuração do ambiente
-│   ├── run_tests.sh            # Execução de testes
-│   ├── create_package.sh       # Criação de pacotes
-│   └── send_notification.py    # Notificações por email
+├── 📁 scripts/           # Scripts de automação (apenas CI)
+│   ├── run_tests.sh            # Execução de testes (CI)
+│   ├── create_package.sh       # Criação de pacotes (CI)
+│   └── send_notification.py    # Notificações por email (CI)
 ├── 📁 .github/workflows/  # CI/CD Pipeline
 │   └── ci-cd.yml         # Pipeline principal
 ├── main.py               # Ponto de entrada principal
@@ -147,16 +142,16 @@ O projeto possui **56 testes unitários** cobrindo todos os módulos principais:
 
 ```bash
 # Executar todos os testes
-pytest tests/
+python -m unittest discover tests/ -v
 
-# Executar testes com cobertura
-pytest tests/ --cov=war --cov-report=html
+# Executar testes de um módulo específico
+python -m unittest tests.test_game -v
 
-# Executar testes específicos
-pytest tests/test_game.py::TestGame::test_game_initialization
+# Executar um teste específico
+python -m unittest tests.test_game.TestGame.test_game_initialization -v
 
-# Executar com verbose
-pytest tests/ -v
+# Executar testes com saída simples
+python -m unittest discover tests/
 ```
 
 ### Cobertura de Testes
@@ -171,7 +166,7 @@ pytest tests/ -v
 O projeto utiliza **GitHub Actions** com pipeline automatizado:
 
 ### Jobs do Pipeline
-1. **Testes**: Executa todos os testes unitários com cobertura em Python 3.9-3.13
+1. **Testes**: Executa todos os testes unitários com unittest em Python 3.9-3.13
 2. **Build**: Cria pacotes de distribuição
 3. **Qualidade**: Análise de código (Black, Flake8, MyPy, Bandit, Safety) - apenas no CI
 4. **Notificação**: Envia emails sobre status do pipeline
@@ -182,7 +177,7 @@ O projeto utiliza **GitHub Actions** com pipeline automatizado:
 - Execução manual via GitHub interface
 
 ### Artefatos Gerados
-- Relatórios de teste (JUnit XML, Coverage HTML/XML)
+- Relatórios de teste (unittest output, text summaries)
 - Pacotes de distribuição (.tar.gz)
 - Relatórios de qualidade de código (apenas no CI)
 
@@ -197,17 +192,17 @@ O projeto utiliza **GitHub Actions** com pipeline automatizado:
 
 2. **Instale as dependências**:
    ```bash
-   pip install -e ".[dev,test]"
+   pip install -e ".[dev]"
    ```
 
 3. **Execute os testes**:
    ```bash
-   pytest tests/ --cov=war
+   python -m unittest discover tests/ -v
    ```
 
 ### Desenvolvimento
-- Use os comandos do `Makefile` para tarefas comuns
-- Execute `make help` para ver todos os comandos disponíveis
+- Use os comandos diretos do Python para desenvolvimento
+- Execute `python -m unittest discover tests/ -v` para rodar testes
 - Certifique-se de que todos os testes passam antes de fazer commit
 
 > **Importante**: As ferramentas de qualidade (Black, MyPy, etc.) rodam automaticamente no CI/CD. Se quiser usá-las localmente, instale-as separadamente.
@@ -215,9 +210,7 @@ O projeto utiliza **GitHub Actions** com pipeline automatizado:
 ## Análise de Qualidade
 
 ### Ferramentas Configuradas
-- **pytest**: Framework de testes principal
-- **pytest-cov**: Cobertura de testes
-- **coverage**: Relatórios de cobertura
+- **unittest**: Framework de testes built-in do Python
 
 ### Ferramentas de CI (apenas no pipeline)
 - **Black**: Formatação automática de código
@@ -245,7 +238,7 @@ O projeto utiliza **GitHub Actions** com pipeline automatizado:
 2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
 3. Faça commits com mensagens descritivas
 4. Escreva/atualize testes para suas mudanças
-5. Execute os testes (`pytest tests/`)
+5. Execute os testes (`python -m unittest discover tests/ -v`)
 6. Faça push da branch (`git push origin feature/nova-funcionalidade`)
 7. Abra um Pull Request
 
@@ -253,26 +246,22 @@ O projeto utiliza **GitHub Actions** com pipeline automatizado:
 
 ```bash
 # Instalar em modo de desenvolvimento
-pip install -e ".[dev,test]"
+pip install -e ".[dev]"
 
 # Executar todos os testes
-pytest tests/
+python -m unittest discover tests/ -v
 
-# Executar testes com cobertura
-pytest tests/ --cov=war --cov-report=html
+# Executar testes de um módulo
+python -m unittest tests.test_game -v
 
-# Executar testes específicos
-pytest tests/test_game.py
+# Executar teste específico
+python -m unittest tests.test_game.TestGame.test_game_initialization
 
 # Executar o jogo
 python main.py
 
-# Usar comandos do Makefile
-make help           # Ver todos os comandos
-make install-dev    # Instalar dependências de desenvolvimento
-make test           # Executar testes
-make test-coverage  # Executar testes com cobertura
-make clean          # Limpar arquivos temporários
+# Limpar arquivos temporários (multiplataforma)
+python -c "import shutil; [shutil.rmtree(p, ignore_errors=True) for p in ['__pycache__', '.pytest_cache', 'htmlcov', 'build', 'dist']]"
 ```
 
 ## Roadmap
