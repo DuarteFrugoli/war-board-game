@@ -13,6 +13,7 @@ Este projeto implementa o clássico jogo de tabuleiro **War** (conhecido como Ri
 - Gerenciamento de dependências com pyproject.toml
 - Testes unitários com pytest (56 testes implementados)
 - CI/CD Pipeline com GitHub Actions
+- Cobertura de testes com pytest-cov
 
 ## Como Executar
 
@@ -172,7 +173,7 @@ O projeto utiliza **GitHub Actions** com pipeline automatizado:
 ### Jobs do Pipeline
 1. **Testes**: Executa todos os testes unitários com cobertura em Python 3.9-3.13
 2. **Build**: Cria pacotes de distribuição
-3. **Qualidade**: Análise de código (Black, Flake8, MyPy, Bandit)
+3. **Qualidade**: Análise de código (Black, Flake8, MyPy, Bandit, Safety) - apenas no CI
 4. **Notificação**: Envia emails sobre status do pipeline
 
 ### Triggers
@@ -183,24 +184,53 @@ O projeto utiliza **GitHub Actions** com pipeline automatizado:
 ### Artefatos Gerados
 - Relatórios de teste (JUnit XML, Coverage HTML/XML)
 - Pacotes de distribuição (.tar.gz)
-- Relatórios de qualidade de código
-- Relatórios de segurança
+- Relatórios de qualidade de código (apenas no CI)
+
+## Como Contribuir
+
+### Configuração Local
+1. **Clone o repositório**:
+   ```bash
+   git clone https://github.com/seu-usuario/war-game-python.git
+   cd war-game-python
+   ```
+
+2. **Instale as dependências**:
+   ```bash
+   pip install -e ".[dev,test]"
+   ```
+
+3. **Execute os testes**:
+   ```bash
+   pytest tests/ --cov=war
+   ```
+
+### Desenvolvimento
+- Use os comandos do `Makefile` para tarefas comuns
+- Execute `make help` para ver todos os comandos disponíveis
+- Certifique-se de que todos os testes passam antes de fazer commit
+
+> **Importante**: As ferramentas de qualidade (Black, MyPy, etc.) rodam automaticamente no CI/CD. Se quiser usá-las localmente, instale-as separadamente.
 
 ## Análise de Qualidade
 
-### Ferramentas Utilizadas
+### Ferramentas Configuradas
+- **pytest**: Framework de testes principal
+- **pytest-cov**: Cobertura de testes
+- **coverage**: Relatórios de cobertura
+
+### Ferramentas de CI (apenas no pipeline)
 - **Black**: Formatação automática de código
 - **Flake8**: Análise de estilo (PEP 8)
 - **MyPy**: Verificação de tipos estáticos
 - **Bandit**: Análise de segurança
 - **Safety**: Verificação de vulnerabilidades em dependências
-- **pytest-cov**: Cobertura de testes
 
 ### Padrões Seguidos
 - PEP 8 (Style Guide for Python Code)
 - PEP 257 (Docstring Conventions)
-- Type hints quando aplicável
 - Nomenclatura em português nos comentários e strings de usuário
+- Cobertura de testes para todos os módulos principais
 
 ## Desenvolvimento
 
@@ -225,23 +255,24 @@ O projeto utiliza **GitHub Actions** com pipeline automatizado:
 # Instalar em modo de desenvolvimento
 pip install -e ".[dev,test]"
 
-# Executar testes com watch (reexecuta ao salvar arquivos)
-ptw tests/
+# Executar todos os testes
+pytest tests/
 
-# Formatar código automaticamente
-black war/ tests/ main.py
+# Executar testes com cobertura
+pytest tests/ --cov=war --cov-report=html
 
-# Verificar estilo
-flake8 war/ tests/ main.py
+# Executar testes específicos
+pytest tests/test_game.py
 
-# Verificar tipos
-mypy war/
+# Executar o jogo
+python main.py
 
-# Análise de segurança
-bandit -r war/
-
-# Gerar documentação
-pdoc war/ --html --output-dir docs/
+# Usar comandos do Makefile
+make help           # Ver todos os comandos
+make install-dev    # Instalar dependências de desenvolvimento
+make test           # Executar testes
+make test-coverage  # Executar testes com cobertura
+make clean          # Limpar arquivos temporários
 ```
 
 ## Roadmap
