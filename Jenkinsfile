@@ -17,11 +17,8 @@ pipeline {
         
         stage('Setup') {
             steps {
-                echo 'Instalando Python e dependências...'
+                echo 'Instalando dependências...'
                 sh '''
-                    # Instalar Python se não existir
-                    apt-get update && apt-get install -y python3 python3-pip python3-venv
-                    
                     python3 --version
                     pip3 install --upgrade pip
                     pip3 install poetry
