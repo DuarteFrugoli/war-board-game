@@ -20,8 +20,14 @@ pipeline {
                 echo 'Instalando dependências...'
                 sh '''
                     python3 --version
-                    pip3 install --upgrade pip
-                    pip3 install poetry
+                    
+                    # Criar ambiente virtual
+                    python3 -m venv .venv
+                    
+                    # Ativar ambiente virtual e instalar dependências
+                    . .venv/bin/activate
+                    pip install --upgrade pip
+                    pip install poetry
                     poetry install --no-root
                 '''
             }
@@ -31,7 +37,8 @@ pipeline {
             steps {
                 echo 'Verificando qualidade do código...'
                 sh '''
-                    pip3 install black flake8 mypy
+                    . .venv/bin/activate
+                    pip install black flake8 mypy
                     echo "=== Black (formatação) ==="
                     black --check war/ tests/ main.py run_gui.py || true
                     
@@ -48,7 +55,8 @@ pipeline {
             steps {
                 echo 'Executando testes...'
                 sh '''
-                    python3 -m pytest tests/ -v --tb=short || python3 -m unittest discover -s tests -p "test_*.py" -v
+                    . .venv/bin/activate
+                    python -m pytest tests/ -v --tb=short || python -m unittest discover -s tests -p "test_*.py" -v
                 '''
             }
         }
@@ -57,6 +65,7 @@ pipeline {
             steps {
                 echo 'Verificando se o projeto pode ser empacotado...'
                 sh '''
+                    . .venv/bin/activate
                     poetry build --format wheel || echo "Build check completed"
                 '''
             }
