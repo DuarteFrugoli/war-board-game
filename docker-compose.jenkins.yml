@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-war-game
+    restart: unless-stopped
+    
+    ports:
+      - "8080:8080"    # Interface web
+      - "50000:50000"  # Porta para agentes
+    
+    volumes:
+      # Dados persistentes do Jenkins
+      - jenkins_home:/var/jenkins_home
+      
+      # Socket do Docker (para executar Docker dentro do Jenkins)
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+      # Cache de pip (opcional, acelera builds)
+      - pip_cache:/root/.cache/pip
+    
+    environment:
+      # Configurações do Java
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=true
+      
+      # Timezone
+      - TZ=America/Sao_Paulo
+    
+    networks:
+      - jenkins-network
+    
+    # Healthcheck para verificar se Jenkins está respondendo
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/login || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # Opcional: Agente Jenkins para builds distribuídos
+  jenkins-agent:
+    image: jenkins/inbound-agent:latest
+    container_name: jenkins-agent-python
+    restart: unless-stopped
+    
+    depends_on:
+      - jenkins
+    
+    environment:
+      - JENKINS_URL=http://jenkins:8080
+      # Estas variáveis devem ser configuradas após criar o agente no Jenkins
+      # - JENKINS_SECRET=<secret-from-jenkins>
+      # - JENKINS_AGENT_NAME=python-agent
+    
+    volumes:
+      - agent_workspace:/home/jenkins/agent
+      - /var/run/docker.sock:/var/run/docker.sock
+    
+    networks:
+      - jenkins-network
+    
+    # Descomente e configure após criar o agente no Jenkins
+    # command: -url http://jenkins:8080 <secret> python-agent
+
+volumes:
+  jenkins_home:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${HOME}/.jenkins_war_game
+  
+  agent_workspace:
+    driver: local
+  
+  pip_cache:
+    driver: local
+
+networks:
+  jenkins-network:
+    driver: bridge

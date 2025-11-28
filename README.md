@@ -163,23 +163,61 @@ python -m unittest discover tests/
 
 ## CI/CD Pipeline
 
-O projeto utiliza **GitHub Actions** com pipeline automatizado:
+O projeto suporta **duas plataformas de CI/CD**:
 
-### Jobs do Pipeline
+### GitHub Actions
+Pipeline automatizado executado na nuvem do GitHub.
+
+**Jobs do Pipeline:**
 1. **Testes**: Executa todos os testes unitários com unittest em Python 3.9-3.13
 2. **Build**: Cria pacotes de distribuição
-3. **Qualidade**: Análise de código (Black, Flake8, MyPy, Bandit, Safety) - apenas no CI
+3. **Qualidade**: Análise de código (Black, Flake8, MyPy, Bandit, Safety)
 4. **Notificação**: Envia emails sobre status do pipeline
 
-### Triggers
+**Triggers:**
 - Push para branches `main` e `develop`
 - Pull requests para `main`
 - Execução manual via GitHub interface
 
-### Artefatos Gerados
+**Artefatos Gerados:**
 - Relatórios de teste (unittest output, text summaries)
 - Pacotes de distribuição (.tar.gz)
-- Relatórios de qualidade de código (apenas no CI)
+- Relatórios de qualidade de código
+
+### Jenkins
+Pipeline configurável para execução em servidor próprio (self-hosted).
+
+**Recursos:**
+- Testes paralelos em múltiplas versões do Python
+- Análises de qualidade configuráveis
+- Build parametrizado
+- Artefatos e relatórios persistidos localmente
+- Notificações customizáveis
+
+**Como Configurar:**
+
+```bash
+# Usando Docker Compose (recomendado)
+docker-compose -f docker-compose.jenkins.yml up -d
+
+# Ou usando o script de setup
+./scripts/setup_jenkins_local.sh
+```
+
+**Acesso:** http://localhost:8080
+
+Para mais informações, consulte a [documentação completa do Jenkins](docs/JENKINS_SETUP.md).
+
+### Comparação das Plataformas
+
+| Recurso | GitHub Actions | Jenkins |
+|---------|----------------|---------|
+| **Hospedagem** | Cloud (GitHub) | Self-hosted |
+| **Setup** | Automático | Manual |
+| **Custo** | Grátis (repos públicos) | Grátis (infraestrutura própria) |
+| **Personalização** | Média | Alta |
+| **Integração Git** | Nativa | Requer configuração |
+| **Artefatos** | GitHub (limitado) | Local (ilimitado) |
 
 ## Como Contribuir
 

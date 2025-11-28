@@ -13,3 +13,9 @@
 1. fazer teste para todos os métodos e funções (unitário)
 2. sempre mandar no github depois de cada alteração
 3. montar a build com "poetry build" sempre que mudar algo
+
+## CI/CD
+- ✓ GitHub Actions configurado e funcionando
+- ✓ Jenkins configurado (Jenkinsfile, docker-compose, scripts)
+- ✓ Documentação completa de setup do Jenkins
+- ✓ Ambiente virtual Poetry configurado (.venv)
