@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.12'
-        }
-    }
+    agent any
     
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -21,11 +17,14 @@ pipeline {
         
         stage('Setup') {
             steps {
-                echo 'Instalando dependências...'
+                echo 'Instalando Python e dependências...'
                 sh '''
-                    python --version
-                    pip install --upgrade pip
-                    pip install poetry
+                    # Instalar Python se não existir
+                    apt-get update && apt-get install -y python3 python3-pip python3-venv
+                    
+                    python3 --version
+                    pip3 install --upgrade pip
+                    pip3 install poetry
                     poetry install --no-root
                 '''
             }
@@ -35,7 +34,7 @@ pipeline {
             steps {
                 echo 'Verificando qualidade do código...'
                 sh '''
-                    pip install black flake8 mypy
+                    pip3 install black flake8 mypy
                     echo "=== Black (formatação) ==="
                     black --check war/ tests/ main.py run_gui.py || true
                     
@@ -52,7 +51,7 @@ pipeline {
             steps {
                 echo 'Executando testes...'
                 sh '''
-                    python -m pytest tests/ -v --tb=short || python -m unittest discover -s tests -p "test_*.py" -v
+                    python3 -m pytest tests/ -v --tb=short || python3 -m unittest discover -s tests -p "test_*.py" -v
                 '''
             }
         }
