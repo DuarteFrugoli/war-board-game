@@ -65,17 +65,8 @@ services:
 
 volumes:
   jenkins_home:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${HOME}/.jenkins_war_game
-  
   agent_workspace:
-    driver: local
-  
   pip_cache:
-    driver: local
 
 networks:
   jenkins-network:
