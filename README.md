@@ -17,51 +17,65 @@ Este projeto implementa o clássico jogo de tabuleiro **War** (conhecido como Ri
 ## Como Executar
 
 ### Pré-requisitos
-- Python 3.9 ou superior (testado até Python 3.13.5)
-- pip (gerenciador de pacotes Python)
+- Python 3.9 ou superior (testado até Python 3.13)
+- Poetry (gerenciador de dependências)
 
-### Instalação Rápida
+### Instalação
 
 ```bash
 # 1. Clonar o repositório
 git clone https://github.com/DuarteFrugoli/war-board-game.git
 cd war-board-game
 
-# 2. Instalar dependências
-pip install -e .
+# 2. Instalar Poetry (se não tiver)
+pip install poetry
 
-# 3. Executar o jogo
-python main.py
+# 3. Instalar dependências
+poetry install --no-root
+
+# 4. Executar o jogo (interface texto)
+poetry run python main.py
+
+# Ou executar interface gráfica (GUI)
+poetry run python run_gui.py
 ```
 
-### Instalação para Desenvolvimento
+### Alternativa: Usando ambiente virtual manualmente
 
 ```bash
-# 1. Clonar e entrar no diretório
-git clone https://github.com/DuarteFrugoli/war-board-game.git
-cd war-board-game
+# 1. Criar ambiente virtual
+python3 -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# ou
+.venv\Scripts\activate     # Windows
 
-# 2. Instalar com dependências de desenvolvimento
-pip install -e ".[dev,test]"
+# 2. Instalar Poetry
+pip install poetry
 
-# 3. Executar testes
-pytest tests/
+# 3. Instalar dependências
+poetry install --no-root
 
 # 4. Executar o jogo
-python main.py
+python run_gui.py
 ```
 
 ### Comandos de Desenvolvimento
 
 ```bash
-# Instalar dependências de desenvolvimento
-pip install -e ".[dev]"
-
 # Executar testes unitários
-python -m unittest discover tests/ -v
+poetry run python -m unittest discover -s tests -p "test_*.py" -v
 
-# Executar teste específico
-python -m unittest tests.test_game.TestGame.test_game_initialization -v
+# Verificar formatação do código
+poetry run black --check war/ tests/
+
+# Verificar estilo (PEP8)
+poetry run flake8 war/ tests/ --max-line-length=100
+
+# Verificar tipos
+poetry run mypy war/ --ignore-missing-imports
+
+# Fazer build do projeto
+poetry build
 ```
 
 ## Como Jogar
@@ -185,28 +199,25 @@ Pipeline automatizado executado na nuvem do GitHub.
 - Relatórios de qualidade de código
 
 ### Jenkins
-Pipeline configurável para execução em servidor próprio (self-hosted).
+Pipeline auto-hospedado executado em Docker com Python pré-instalado.
 
-**Recursos:**
-- Testes paralelos em múltiplas versões do Python
-- Análises de qualidade configuráveis
-- Build parametrizado
-- Artefatos e relatórios persistidos localmente
-- Notificações customizáveis
-
-**Como Configurar:**
+**Como Usar:**
 
 ```bash
-# Usando Docker Compose (recomendado)
+# Subir Jenkins com Docker Compose
 docker-compose -f docker-compose.jenkins.yml up -d
 
-# Ou usando o script de setup
-./scripts/setup_jenkins_local.sh
+# Acessar em http://localhost:8080
+# Senha inicial nos logs: docker logs jenkins-war-game
+
+# Parar Jenkins
+docker-compose -f docker-compose.jenkins.yml down
 ```
 
-**Acesso:** http://localhost:8080
-
-Para mais informações, consulte a [documentação completa do Jenkins](docs/JENKINS_SETUP.md).
+**Documentação:**
+- [Guia de Setup do Jenkins](docs/JENKINS_SETUP.md)
+- [Como Usar o Jenkins](docs/JENKINS_USAGE.md)
+- [Docker e Jenkins](docs/DOCKER_JENKINS.md)
 
 ### Comparação das Plataformas
 
@@ -342,6 +353,15 @@ Sinta-se à vontade para:
 - Enviar Pull Requests
 - Melhorar a documentação
 - Dar uma estrela no repositório!
+
+## Documentação
+
+Documentação completa disponível na pasta [`docs/`](docs/):
+
+- **[Roteiro de Apresentação C14](docs/ROTEIRO_APRESENTACAO_C14.md)** - Guia para apresentação de Engenharia de Software
+- **[Setup do Jenkins](docs/JENKINS_SETUP.md)** - Como instalar e configurar Jenkins
+- **[Como Usar Jenkins](docs/JENKINS_USAGE.md)** - Guia de uso do Jenkins
+- **[Docker e Jenkins](docs/DOCKER_JENKINS.md)** - Explicação sobre Dockerfile e Docker Compose
 
 ## Licença
 

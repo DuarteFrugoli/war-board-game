@@ -75,6 +75,16 @@ pipeline {
     post {
         always {
             echo 'Pipeline finalizado!'
+            
+            // Arquivar artefatos do build (se existirem)
+            script {
+                if (fileExists('dist/')) {
+                    archiveArtifacts artifacts: 'dist/*.whl,dist/*.tar.gz', 
+                                   allowEmptyArchive: true,
+                                   fingerprint: true
+                }
+            }
+            
             cleanWs()
         }
         success {
