@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from war.game import Game
 from war.player import Player
 from war.territory import Territory
@@ -106,7 +106,8 @@ class TestTurnSystem(unittest.TestCase):
         self.assertIsNone(card)
         self.assertEqual(len(self.player1.cards), initial_cards)
 
-    def test_play_turn_structure(self):
+    @patch('builtins.print')  # Suprime prints durante o teste
+    def test_play_turn_structure(self, mock_print):
         """Testa a estrutura básica do turno."""
         result = self.game.play_turn(self.player1)
         
