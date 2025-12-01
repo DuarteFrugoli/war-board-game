@@ -1,7 +1,7 @@
-from war.Player import Player
+from war.player import Player
 from war.utils import roll_die
 from war.enums import COLORS
-from war.Game import Game
+from war.game import Game
 from war.interface import get_number_of_players, create_players, determine_card_dealer
 
 

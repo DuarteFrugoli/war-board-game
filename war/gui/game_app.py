@@ -1,8 +1,8 @@
 import pygame
 import sys
 from typing import Optional
-from war.Game import Game
-from war.Player import Player
+from war.game import Game
+from war.player import Player
 from .screens.main_menu import MainMenu
 from .screens.player_setup import PlayerSetupScreen
 from .screens.dealer_selection import DealerSelectionScreen
